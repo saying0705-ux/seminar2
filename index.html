@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세미나 기획 데스크 | NE능률 디지털마케팅팀</title>
+<meta name="description" content="NE능률 디지털마케팅팀 세미나 요청 접수 및 진행현황 조회">
+<meta name="theme-color" content="#0E2C55">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:title" content="세미나 기획 데스크">
+<meta property="og:description" content="세미나 요청 접수 및 진행현황 조회">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E2C55'/%3E%3Ctext x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='sans-serif'%3EN%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    /* 보고서 톤앤매너 — 잉크 네이비 기반, 절제된 강조색 */
+    --navy:#0E2C55; --navy-deep:#081E3C; --navy-mid:#2C5A93;
+    --navy-soft:#E6EEF7; --navy-line:#C7D6E8;
+    --bg:#EDEFF2; --surface:#FFFFFF; --surface-2:#F6F8FA;
+    --ink:#1E2733; --ink-soft:#4A5563; --muted:#7C8695; --muted-soft:#EFF2F5;
+    --line:#DDE2E8; --line-strong:#C8D0DA;
+    --gold:#9A5B00; --gold-soft:#FCF1DE; --gold-line:#E3C08A;
+    --green:#186043; --green-soft:#E6F1EB; --green-line:#A6CCB7;
+    --blue:#2C5A93; --blue-soft:#E9F0F8;
+    --red:#96201A; --red-soft:#FBEAE8; --red-line:#E0B3AE;
+    --radius:6px;
+    --shadow:0 1px 2px rgba(14,44,85,.05), 0 6px 18px rgba(14,44,85,.05);
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);}
+  body{-webkit-font-smoothing:antialiased;letter-spacing:-.005em;}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.01em;}
+
+  #app{max-width:760px;margin:0 auto;min-height:100vh;background:var(--surface);
+       display:flex;flex-direction:column;transition:max-width .15s ease;
+       box-shadow:0 0 0 1px var(--line);}
+  #app.wide-view{max-width:1280px;}
+  @media (max-width:1340px){ #app.wide-view{max-width:100%;} }
+
+  /* ---------- Header ---------- */
+  header.top{
+    position:sticky;top:0;z-index:20;background:var(--surface);
+    border-bottom:2.5px solid var(--navy);padding:20px 26px 0 26px;
+  }
+  .brand-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+             margin-bottom:16px;flex-wrap:wrap;}
+  .brand{display:flex;flex-direction:column;gap:3px;}
+  .brand .mark{font-size:11px;letter-spacing:.14em;color:var(--navy-mid);font-weight:700;}
+  .brand h1{margin:0;font-size:21px;font-weight:800;letter-spacing:-.03em;color:var(--navy);}
+  .new-btn{
+    background:var(--navy);color:#fff;border:none;border-radius:var(--radius);
+    padding:10px 18px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;
+    white-space:nowrap;letter-spacing:-.01em;
+  }
+  .new-btn:hover{background:var(--navy-deep);}
+  .tabs{display:flex;gap:22px;}
+  .tab-btn{
+    background:none;border:none;color:var(--muted);font-family:inherit;
+    font-size:14px;font-weight:700;padding:0 2px 11px 2px;cursor:pointer;
+    border-bottom:2.5px solid transparent;margin-bottom:-2.5px;letter-spacing:-.01em;
+  }
+  .tab-btn:hover{color:var(--ink-soft);}
+  .tab-btn.active{color:var(--navy);border-bottom-color:var(--navy);}
+
+  .back-row{display:flex;align-items:center;gap:12px;padding-bottom:16px;}
+  .back-link{background:none;border:none;color:var(--navy-mid);font-size:13px;cursor:pointer;
+             padding:0;font-weight:700;font-family:inherit;}
+  .back-link:hover{color:var(--navy);text-decoration:underline;}
+  .page-title{font-size:16px;font-weight:800;color:var(--navy);letter-spacing:-.02em;}
+
+  main{flex:1;padding:20px 26px 110px 26px;}
+
+  /* ---------- Notice strip ---------- */
+  .notice{
+    display:flex;align-items:flex-start;gap:8px;
+    background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--navy-mid);
+    border-radius:0 var(--radius) var(--radius) 0;
+    padding:9px 13px;font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin-bottom:10px;
+  }
+  .notice b{color:var(--ink);font-weight:700;}
+  .notice.warn{border-left-color:var(--gold);background:var(--gold-soft);border-color:var(--gold-line);color:#6E4300;}
+  .notice.err{border-left-color:var(--red);background:var(--red-soft);border-color:var(--red-line);color:#7A1B16;}
+  .notice .n-act{margin-left:auto;flex:none;}
+  .notice button{
+    background:var(--surface);border:1px solid var(--line-strong);border-radius:4px;
+    padding:5px 11px;font-size:12px;font-weight:700;color:var(--navy);cursor:pointer;font-family:inherit;
+  }
+  .conn{font-size:11.5px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;color:var(--muted);}
+  .conn .led{width:6px;height:6px;border-radius:50%;background:var(--muted);flex:none;}
+  .conn.live{color:var(--green);} .conn.live .led{background:var(--green);}
+  .conn.local{color:var(--gold);} .conn.local .led{background:var(--gold);}
+
+  /* ---------- Search / filter ---------- */
+  .search-bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .search-bar input{
+    flex:1;min-width:200px;border:1px solid var(--line-strong);border-radius:var(--radius);
+    padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--ink);background:var(--surface);
+  }
+  .search-bar input:focus{outline:2px solid var(--navy);outline-offset:-1px;border-color:var(--navy);}
+  .filter-pills{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .pill{
+    border:1px solid var(--line-strong);background:var(--surface);border-radius:var(--radius);
+    padding:8px 14px;font-size:12.5px;font-weight:700;color:var(--ink-soft);cursor:pointer;
+    font-family:inherit;white-space:nowrap;
+  }
+  .pill:hover{border-color:var(--navy-mid);color:var(--navy);}
+  .pill.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+
+  .toolbar{margin-bottom:12px;}
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px;}
+  select.ctrl{
+    border:1px solid var(--line-strong);border-radius:var(--radius);background:var(--surface);
+    padding:8px 11px;font-size:12.5px;font-family:inherit;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;max-width:200px;
+  }
+  select.ctrl:focus{outline:2px solid var(--navy);outline-offset:-1px;border-color:var(--navy);}
+  select.ctrl.on{border-color:var(--navy);color:var(--navy);background:var(--navy-soft);}
+  .pill.ghost{border-style:dashed;color:var(--muted);}
+  .pill.ghost:hover{border-style:solid;}
+  .refresh-btn{
+    display:inline-flex;align-items:center;gap:6px;margin-left:auto;
+    border:1px solid var(--navy);background:var(--surface);border-radius:var(--radius);
+    padding:8px 14px;font-size:12.5px;font-weight:700;color:var(--navy);cursor:pointer;font-family:inherit;
+    white-space:nowrap;
+  }
+  .refresh-btn:hover{background:var(--navy);color:#fff;}
+  .refresh-btn:disabled{opacity:.55;cursor:progress;background:var(--surface);color:var(--navy);}
+  .refresh-btn .ico{
+    width:11px;height:11px;border:2px solid currentColor;border-top-color:transparent;
+    border-radius:50%;display:inline-block;
+  }
+  .refresh-btn.spin .ico{animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .result-line{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    font-size:12px;color:var(--muted);font-weight:600;margin:12px 0 8px 0;
+  }
+  .result-line b{color:var(--navy);font-weight:800;}
+  .result-line .stamp{color:var(--muted);font-weight:600;}
+  mark{background:var(--gold-soft);color:#6E4300;font-weight:800;padding:0 1px;border-radius:2px;}
+
+  /* ---------- Table ---------- */
+  .archive-table-wrap{
+    border:1px solid var(--line);border-radius:var(--radius);overflow:auto;background:var(--surface);
+    max-height:calc(100vh - 300px);
+  }
+  table.archive-table{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px;line-height:1.45;}
+  table.archive-table thead th{
+    position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;font-weight:600;
+    padding:9px 12px;white-space:nowrap;z-index:2;font-size:12px;letter-spacing:-.01em;
+    border-right:1px solid rgba(255,255,255,.14);
+  }
+  table.archive-table thead th:last-child{border-right:none;}
+  table.archive-table thead th.sortable{cursor:pointer;user-select:none;}
+  table.archive-table thead th.sortable:hover{background:var(--navy-deep);}
+  .sort-arrow{opacity:.7;font-size:10px;margin-left:2px;}
+  table.archive-table td{
+    padding:8px 12px;border-bottom:1px solid var(--line);color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:top;
+  }
+  table.archive-table tbody tr:last-child td{border-bottom:none;}
+  table.archive-table td.cell-wide{white-space:normal;}
+  table.archive-table th.col-date, table.archive-table td.col-date{white-space:nowrap;width:104px;}
+  table.archive-table th.col-kind, table.archive-table td.col-kind{width:112px;}
+  table.archive-table th.col-qtr, table.archive-table td.col-qtr{width:142px;white-space:nowrap;}
+  table.archive-table th.col-product, table.archive-table td.col-product{min-width:230px;max-width:330px;white-space:normal;}
+  table.archive-table th.col-title, table.archive-table td.col-title{min-width:300px;max-width:440px;}
+  table.archive-table th.col-reason, table.archive-table td.col-reason{min-width:180px;max-width:250px;white-space:normal;}
+  table.archive-table td.cell-link{color:var(--blue);max-width:70px;font-weight:700;}
+  table.archive-table td.cell-sub, .cell-sub{color:var(--muted);font-size:11px;}
+  table.archive-table tbody tr:nth-child(even){background:#FAFBFC;}
+  table.archive-table tbody tr:hover{background:var(--navy-soft);cursor:pointer;}
+  table.archive-table tbody tr.row-highlight{background:var(--gold-soft)!important;box-shadow:inset 3px 0 0 var(--gold);}
+  tr.table-group-row td{
+    font-size:12px;font-weight:800;color:var(--navy);background:var(--navy-soft);
+    padding:7px 12px;border-bottom:1px solid var(--navy-line);letter-spacing:-.01em;
+  }
+  .kind-chip{
+    display:inline-block;background:var(--muted-soft);color:var(--ink-soft);border:1px solid var(--line);
+    font-size:11px;font-weight:700;padding:2px 8px;border-radius:3px;white-space:nowrap;
+  }
+  .type-tag{
+    display:inline-block;background:var(--navy-soft);color:var(--navy);border:1px solid var(--navy-line);
+    font-size:10px;font-weight:800;padding:1px 6px;border-radius:3px;margin-right:5px;vertical-align:1px;
+  }
+  .new-flag-inline{
+    display:inline-block;background:var(--gold);color:#fff;font-size:9.5px;font-weight:800;
+    padding:1px 6px;border-radius:3px;vertical-align:1px;margin-left:4px;letter-spacing:.04em;
+  }
+  .badge{
+    display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:3px;
+    white-space:nowrap;border:1px solid transparent;
+  }
+  .badge.gray{background:var(--muted-soft);color:var(--ink-soft);border-color:var(--line);}
+  .badge.blue{background:var(--blue-soft);color:var(--blue);border-color:var(--navy-line);}
+  .badge.green{background:var(--green-soft);color:var(--green);border-color:var(--green-line);}
+  .badge.amber{background:var(--gold-soft);color:var(--gold);border-color:var(--gold-line);}
+  .badge.navy{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  .empty{text-align:center;padding:56px 20px;color:var(--muted);font-size:13.5px;line-height:1.7;}
+  .empty .big{font-size:13px;font-weight:800;color:var(--ink-soft);margin-bottom:8px;letter-spacing:.06em;}
+
+  /* ---------- Detail sheet ---------- */
+  .sheet-backdrop{
+    position:fixed;inset:0;background:rgba(14,30,50,.46);z-index:40;
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .sheet{
+    background:var(--surface);width:100%;max-width:760px;border-radius:10px 10px 0 0;
+    padding:24px 26px 30px 26px;max-height:88vh;overflow-y:auto;
+    box-shadow:0 -8px 40px rgba(0,0,0,.22);
+  }
+  .sheet-handle{width:38px;height:4px;background:var(--line-strong);border-radius:4px;margin:0 auto 16px auto;}
+  .sheet h2{font-size:17.5px;margin:0 0 5px 0;font-weight:800;letter-spacing:-.02em;color:var(--navy);line-height:1.4;}
+  .sheet .sheet-code{font-size:12px;color:var(--muted);margin-bottom:18px;font-weight:700;}
+  .kv{display:grid;grid-template-columns:96px 1fr;gap:9px 14px;font-size:13.5px;margin-bottom:7px;}
+  .kv .k{color:var(--ink-soft);font-weight:700;}
+  .kv .v{color:var(--ink);}
+  .sheet-section{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
+  .sheet-close{
+    position:absolute;top:16px;right:18px;background:var(--muted-soft);border:1px solid var(--line);
+    width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;color:var(--ink-soft);font-family:inherit;
+  }
+  .sheet-close:hover{background:var(--line);}
+  .sheet-wrap{position:relative;}
+  .reason-box{
+    background:var(--gold-soft);border:1px solid var(--gold-line);color:#6E4300;
+    border-radius:var(--radius);padding:11px 13px;font-size:13px;margin-top:14px;line-height:1.6;
+  }
+  .link-box{
+    background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);
+    padding:11px 13px;font-size:13px;color:var(--ink-soft);white-space:pre-wrap;line-height:1.6;word-break:break-all;
+  }
+
+  /* ---------- Stepper ---------- */
+  .stepper{display:flex;margin:4px 0 2px 0;}
+  .step{flex:1;position:relative;text-align:center;padding-top:16px;}
+  .step .line{position:absolute;top:5px;left:0;width:100%;height:2px;background:var(--line);}
+  .step:first-child .line{left:50%;width:50%;}
+  .step:last-child .line{width:50%;}
+  .step .dot{
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:12px;height:12px;border-radius:50%;background:var(--surface);
+    border:2px solid var(--line-strong);
+  }
+  .step .lbl{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:-.01em;}
+  .step.done .line{background:var(--navy-mid);}
+  .step.done .dot{background:var(--navy);border-color:var(--navy);}
+  .step.done .lbl{color:var(--navy);}
+  .step.active-green .line{background:var(--green);}
+  .step.active-green .dot{background:var(--green);border-color:var(--green);}
+  .step.active-green .lbl{color:var(--green);}
+  .step.active-amber .line{background:var(--gold);}
+  .step.active-amber .dot{background:var(--gold);border-color:var(--gold);}
+  .step.active-amber .lbl{color:var(--gold);}
+  .step.muted-end .lbl{color:var(--muted);}
+
+  /* ---------- Form ---------- */
+  .section-label{
+    font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--muted);
+    margin:26px 0 12px 0;padding-bottom:7px;border-bottom:1px solid var(--line);
+  }
+  .field{margin-bottom:22px;}
+  .field label{display:flex;align-items:center;font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:9px;letter-spacing:-.01em;}
+  .field-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:19px;height:19px;border-radius:3px;background:var(--navy);color:#fff;
+    font-size:11px;font-weight:700;margin-right:9px;flex-shrink:0;
+  }
+  .sub-caption{font-size:12px;font-weight:700;color:var(--ink-soft);margin:11px 0 6px 1px;}
+  .field label .req{color:var(--red);margin-left:3px;}
+  .field label .opt{color:var(--muted);font-weight:600;margin-left:6px;font-size:12px;}
+  .field .help{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.65;white-space:pre-line;}
+  .field .help b{color:var(--ink-soft);font-weight:700;}
+  .btn-group{display:flex;flex-wrap:wrap;gap:7px;}
+  .choice-btn{
+    padding:10px 15px;border-radius:var(--radius);border:1px solid var(--line-strong);background:var(--surface);
+    font-size:13.5px;font-weight:700;color:var(--ink-soft);cursor:pointer;font-family:inherit;letter-spacing:-.01em;
+  }
+  .choice-btn:hover{border-color:var(--navy-mid);color:var(--navy);}
+  .choice-btn.selected{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .choice-btn.kind-btn{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;min-width:152px;padding:9px 15px;}
+  .kind-btn-title{font-size:13.5px;font-weight:800;}
+  .kind-btn-desc{font-size:10.5px;font-weight:600;color:var(--muted);}
+  .choice-btn.kind-btn.selected .kind-btn-desc{color:rgba(255,255,255,.78);}
+  .choice-btn.add-btn{border-style:dashed;color:var(--navy);}
+  .choice-btn.add-btn.selected{border-style:solid;color:#fff;}
+  input[type=text], input[type=email], textarea{
+    width:100%;border:1px solid var(--line-strong);border-radius:var(--radius);padding:11px 12px;
+    font-size:14px;font-family:inherit;color:var(--ink);background:var(--surface);
+  }
+  input:focus, textarea:focus{outline:2px solid var(--navy);outline-offset:-1px;border-color:var(--navy);}
+  textarea{resize:vertical;min-height:84px;line-height:1.6;}
+  .submit-bar{position:sticky;bottom:0;background:linear-gradient(to top,var(--surface) 72%,rgba(255,255,255,0));padding:16px 0 6px 0;margin-top:10px;}
+  .submit-btn{
+    width:100%;background:var(--navy);color:#fff;border:none;border-radius:var(--radius);
+    padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:-.01em;
+    box-shadow:0 4px 14px rgba(14,44,85,.22);
+  }
+  .submit-btn:hover{background:var(--navy-deep);}
+  .submit-btn:disabled{background:var(--muted);box-shadow:none;cursor:not-allowed;}
+
+  /* ---------- Form: 안내 / 진행률 / 검증 ---------- */
+  .guide{
+    background:var(--surface-2);border:1px solid var(--line);border-left:4px solid var(--navy);
+    border-radius:0 var(--radius) var(--radius) 0;padding:16px 20px;margin-bottom:18px;
+  }
+  .guide h3{margin:0 0 11px 0;font-size:14px;font-weight:800;color:var(--navy);letter-spacing:-.02em;}
+  .guide ul{margin:0;padding-left:0;list-style:none;}
+  .guide li{font-size:13px;color:var(--ink-soft);line-height:1.7;padding-left:15px;position:relative;margin-bottom:3px;}
+  .guide li::before{content:"";position:absolute;left:3px;top:10px;width:4px;height:4px;border-radius:50%;background:var(--muted);}
+  .guide li b{color:var(--ink);font-weight:700;}
+  .guide-note{
+    margin-top:13px;padding:10px 13px;border-radius:var(--radius);
+    background:var(--gold-soft);border:1px solid var(--gold-line);color:#6E4300;
+    font-size:12.5px;line-height:1.65;
+  }
+  .disclose{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;}
+  .disclose-btn{
+    background:none;border:none;padding:0;cursor:pointer;font-family:inherit;
+    font-size:12.5px;font-weight:700;color:var(--blue);
+  }
+  .disclose-btn:hover{color:var(--navy);text-decoration:underline;}
+  .disclose-body{
+    margin-top:9px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);
+    padding:12px 14px;font-size:12.5px;color:var(--ink-soft);line-height:1.75;white-space:pre-line;
+  }
+  .disclose-body .good{color:var(--green);font-weight:800;}
+  .disclose-body .bad{color:var(--red);font-weight:800;}
+  .disclose-body b{color:var(--ink);font-weight:700;}
+
+  .progress-wrap{
+    position:sticky;top:var(--hdr-h,0px);z-index:5;background:var(--surface);
+    padding:11px 0 12px 0;margin:-4px 0 16px 0;
+    box-shadow:0 8px 8px -8px rgba(14,44,85,.10);
+  }
+  .progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+  .progress-head .lbl{font-size:12px;font-weight:800;color:var(--ink-soft);letter-spacing:-.01em;}
+  .progress-head .cnt{font-size:12px;font-weight:800;color:var(--navy);}
+  .progress-head .cnt.done{color:var(--green);}
+  .progress-bar{height:5px;border-radius:3px;background:var(--muted-soft);overflow:hidden;}
+  .progress-fill{height:100%;background:var(--navy);border-radius:3px;transition:width .25s ease;}
+  .progress-fill.done{background:var(--green);}
+
+  .field.has-error input[type=text], .field.has-error input[type=email], .field.has-error textarea{
+    border-color:var(--red-line);background:#FFF9F8;
+  }
+  .field.has-error > label{color:var(--red);}
+  .err-msg{font-size:12px;font-weight:700;color:var(--red);margin-top:7px;}
+
+  .draft-bar{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--blue-soft);border:1px solid var(--navy-line);border-radius:var(--radius);
+    padding:10px 13px;margin-bottom:14px;font-size:12.5px;color:var(--navy);line-height:1.55;
+  }
+  .draft-bar button{
+    background:var(--surface);border:1px solid var(--navy-line);border-radius:4px;padding:6px 12px;
+    font-size:12px;font-weight:700;color:var(--navy);cursor:pointer;font-family:inherit;white-space:nowrap;
+  }
+  .draft-bar button:hover{background:var(--navy);color:#fff;}
+  .dept-custom{margin-top:10px;}
+  .picked{margin-top:9px;font-size:12px;color:var(--ink-soft);}
+  .picked b{color:var(--navy);font-weight:800;}
+  .counter{font-size:11.5px;color:var(--muted);text-align:right;margin-top:6px;font-weight:600;}
+  .counter.warn{color:var(--gold);}
+
+  /* ---------- Confirmation ---------- */
+  .confirm-wrap{padding:64px 20px;text-align:center;}
+  .confirm-check{
+    width:58px;height:58px;border-radius:50%;background:var(--green-soft);color:var(--green);
+    border:1px solid var(--green-line);
+    display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 20px auto;
+  }
+  .confirm-wrap h2{font-size:19px;margin:0 0 10px 0;color:var(--navy);letter-spacing:-.02em;}
+  .confirm-code{
+    display:inline-block;background:var(--surface-2);border:1px solid var(--line-strong);border-radius:var(--radius);
+    padding:11px 20px;font-size:16px;font-weight:800;color:var(--navy);margin:10px 0 24px 0;
+  }
+  .confirm-wrap p{color:var(--ink-soft);font-size:13.5px;line-height:1.75;max-width:420px;margin:0 auto 26px auto;}
+  .confirm-wrap p b{color:var(--ink);font-weight:700;}
+  .confirm-btn{
+    background:var(--navy);color:#fff;border:none;border-radius:var(--radius);padding:13px 26px;
+    font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;
+  }
+  .confirm-btn:hover{background:var(--navy-deep);}
+
+  .hidden{display:none!important;}
+
+  @media (max-width:640px){
+    header.top{padding:16px 16px 0 16px;}
+    main{padding:16px 16px 110px 16px;}
+    .brand h1{font-size:18px;}
+    .new-btn{padding:9px 14px;font-size:12.5px;}
+    .kv{grid-template-columns:80px 1fr;font-size:13px;}
+    .sheet{padding:20px 18px 26px 18px;}
+    .archive-table-wrap{max-height:none;}
+    .tabs{gap:18px;}
+    .result-line{flex-direction:column;align-items:flex-start;gap:5px;}
+    select.ctrl{flex:1;min-width:0;max-width:none;}
+    .refresh-btn{margin-left:0;flex:1;justify-content:center;}
+    .filter-row .pill{flex:1;text-align:center;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ HEADER ============ -->
+  <header class="top" id="header">
+    <div class="brand-row" id="browseHeaderRow">
+      <div class="brand">
+        <span class="mark">NE능률 디지털서비스본부 · 디지털마케팅팀</span>
+        <h1>세미나 기획 데스크</h1>
+      </div>
+      <button class="new-btn" onclick="goToForm()">새 요청서 작성</button>
+    </div>
+    <div class="tabs" id="browseTabs">
+      <button class="tab-btn active" data-tab="progress" onclick="switchTab('progress')">진행현황</button>
+      <button class="tab-btn" data-tab="archive" onclick="switchTab('archive')">아카이브</button>
+    </div>
+
+    <div class="back-row hidden" id="formHeaderRow">
+      <button class="back-link" onclick="goToBrowse()">← 목록으로</button>
+      <span class="page-title">세미나 요청서</span>
+    </div>
+  </header>
+
+  <main id="main"></main>
+</div>
+
+<script>
+/* =========================================================
+   MOCK DATA (실제 구글시트 연동 전, 테스트용 목업 데이터)
+   ========================================================= */
+const YEARS = (()=>{ const base = new Date().getFullYear() % 100; return [base, base+1, base+2, base+3].map(y=>String(y).padStart(2,'0')); })();
+const QUARTER_DEFS = [
+  {label:"1분기(1-3월)"}, {label:"2분기(4-6월)"}, {label:"3분기(7-9월)"}, {label:"4분기(10-12월)"}
+];
+const QUARTERS_ALL = [];
+YEARS.forEach(y => QUARTER_DEFS.forEach(qd => QUARTERS_ALL.push(`${y}년 ${qd.label}`)));
+/* 기본 부서 목록. 구글시트 '부서 관리' 탭이 있으면 그 값으로 자동 교체되고,
+   목록에 없는 부서는 폼에서 '직접 입력'으로 언제든 추가할 수 있습니다. */
+const DEPTS_DEFAULT = ["채널마케팅본부", "프로덕트마케팅본부"];
+const DEPT_CUSTOM = "__custom__";
+const PRODUCT_TYPES = ["제품(교재)", "서비스"];
+const SEMINAR_KIND_DEFS = [
+  {label:"혼강세미나", desc:"목요일 · 교재 위주"},
+  {label:"공부방세미나", desc:"토요일 · 학원 운영 및 교육트렌드 위주"},
+  {label:"특집세미나", desc:"협업 또는 긴급세미나"},
+  {label:"신간런칭세미나", desc:""}
+];
+const TARGET_OPTIONS = ["유치", "초등", "중등", "고등", "학원장", "강사", "학부모", "학생"];
+
+const seedNeeds = [
+  {id:"N-2026-001", qtr:"27년 1분기(1-3월)", dept:"채널마케팅본부", owner:"김민수",
+   productType:"제품(교재)", productName:"Reading Town", productDetail:"겨울방학 특강 세트(초등 1~3학년)", kind:"혼강세미나",
+   target:"초등·학부모",
+   background:"작년 동계특강에서 학부모 반응이 좋았고, 겨울방학 시즌 수요가 매년 꾸준함",
+   effect:"겨울방학 특강 연계 신규 채택 유도",
+   ref:"https://drive.google.com/example1 - 작년 동계특강 반응자료", email:"minsu.kim@example.com",
+   submitted:"2026-08-20 14:30", status:"검토중", holdReason:""},
+  {id:"N-2026-002", qtr:"27년 1분기(1-3월)", dept:"프로덕트마케팅본부", owner:"이수진",
+   productType:"서비스", productName:"NE Tutor(AI)", productDetail:"중등 내신 대비 AI 튜터링 체험판", kind:"신간런칭세미나",
+   target:"중등·학생",
+   background:"AI 튜터링 신규 서비스 런칭을 앞두고 있어 사전 인지도 확보가 필요함",
+   effect:"신규 서비스 인지도 확보 및 체험 전환",
+   ref:"", email:"sujin.lee@example.com",
+   submitted:"2026-08-22 10:05", status:"접수완료", holdReason:""},
+  {id:"N-2026-003", qtr:"26년 4분기(10-12월)", dept:"채널마케팅본부", owner:"박지훈",
+   productType:"제품(교재)", productName:"Grammar Bridge", productDetail:"개정판 중1~3 세트", kind:"혼강세미나",
+   target:"중등·강사",
+   background:"개정판 출시 이후 문법 지도 교사들의 채택 문의가 늘고 있음",
+   effect:"개정판 채택 확대",
+   ref:"https://drive.google.com/example2 - 3분기 세미나 설문결과", email:"",
+   submitted:"2026-08-10 09:15", status:"수락(채택)", holdReason:""},
+  {id:"N-2026-004", qtr:"27년 2분기(4-6월)", dept:"프로덕트마케팅본부", owner:"최유리",
+   productType:"서비스", productName:"온라인 진단평가 시스템", productDetail:"학년별 맞춤 문항 자동 채점 서비스", kind:"특집세미나",
+   target:"학원장",
+   background:"신학기를 앞두고 학원들의 진단평가 도구 도입 문의가 증가하는 추세",
+   effect:"신학기 진단평가 도입 유도",
+   ref:"", email:"yuri.choi@example.com",
+   submitted:"2026-08-18 16:40", status:"검토중", holdReason:""},
+  {id:"N-2026-005", qtr:"26년 4분기(10-12월)", dept:"채널마케팅본부", owner:"정하늘",
+   productType:"제품(교재)", productName:"Phonics Kingdom", productDetail:"시리즈 전권 세트", kind:"공부방세미나",
+   target:"유치·초등·학부모",
+   background:"파닉스 교재 시장 경쟁이 치열해지고 있어 차별화된 커리큘럼 소개가 필요함",
+   effect:"파닉스 시장 점유율 확대",
+   ref:"https://instagram.com/example - 타깃 반응 참고", email:"haneul.jung@example.com",
+   submitted:"2026-08-12 11:20", status:"차기 검토",
+   holdReason:"이번 분기 슬롯 부족, 26년 4분기 강사 풀과 겹쳐 다음 기수 재검토 예정"},
+];
+
+const archiveGeneral = [
+  {name:"초등 비문학 리딩 수업 만들기 A to Z -배경지식에서 독해력까지: 초등 필수 리딩서 Subject Link 완벽 활용법", product:"Subject Link", date:"2025-01-16", kind:"혼강세미나", applied:125, attended:58, instructor:"정효진", video:"https://youtube.com/live/Ne21UEXkb7U?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"Beyond Limits: 영어전문공부방에서 영어학원으로 가는 로드맵", product:"공부방 운영", date:"2025-01-18", kind:"공부방세미나", applied:120, attended:56, instructor:"맥시멈영어학원 대표 원장", video:"https://youtube.com/live/12HQrfSmupU?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"아일쌤과 함께하는 Toy Team 실전!", product:"Toy Team", date:"2025-02-13", kind:"혼강세미나", applied:129, attended:55, instructor:"아일쌤", video:"https://youtube.com/live/JdXOHkNgxG4?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"고교학점제, 영어 학습 성공전략", product:"", date:"2025-02-22", kind:"공부방세미나", applied:174, attended:61, instructor:"갈쌤", video:"https://youtube.com/live/uPMS2B0AB_o?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"글쓰기와 토론으로 미래를 준비하는 교육의 힘 (Writing & Debate 전략)", product:"Speaking Stage Plus / Write It", date:"2025-03-13", kind:"혼강세미나", applied:231, attended:88, instructor:"맥시멈영어학원 대표 원장", video:"https://youtube.com/live/thp_-kKd5vs?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"[특강] 빌드앤그로우 x 청취닷컴 \n혼자라서 더 효과적인 1인 커리큘럼 수업", product:"", date:"2025-03-22", kind:"공부방세미나", applied:274, attended:71, instructor:"제니퍼 원장", video:"https://youtube.com/live/hutshvsFHq4?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"문법이 재미있어지는 순간 : 차차영어학원의 스토리텔링 문법 지도법(중학영문법 Link)", product:"중학영문법 Link", date:"2025-04-10", kind:"혼강세미나", applied:232, attended:107, instructor:"이유진", video:"https://youtube.com/live/2Kbf09mrpJc?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"[특강] 빌드앤그로우 x 클래스카드\n링크시리즈 100% 활용하기", product:"Subject Link", date:"2025-04-19", kind:"공부방세미나", applied:352, attended:150, instructor:"이화영 원장", video:"https://youtube.com/live/Kk-maaAmzx0?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"일상 대화부터 Speech의 기초까지,\nSpeaking Stage로 중등 말하기 수행평가 완벽 대비하기", product:"Speaking Stage", date:"2025-05-15", kind:"혼강세미나", applied:335, attended:88, instructor:"박지요", video:"https://youtube.com/live/H-JyDYUcvik?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"어학원 같은 자기주도 완전학습 공부방 만들기 (커리큘럼 강화)", product:"", date:"2025-05-24", kind:"공부방세미나", applied:443, attended:106, instructor:"쥴리쌤", video:"https://youtube.com/live/GybokIW8CLE?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"보카, Reading(오초영, Read It)", product:"Read It/ 요즘초등영단어", date:"2025-06-19", kind:"혼강세미나", applied:449, attended:116, instructor:"강지아", video:"https://youtube.com/live/F8tP_FhJt98?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"배움의 온도가 달라지는 공간 : 학생을 성장시키는 공간의 비밀", product:"", date:"2025-06-28", kind:"혼강세미나", applied:389, attended:56, instructor:"이유진", video:"https://youtube.com/live/Dxth2QGGpMI?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"단계별 모델 텍스트와 오거나이저로 완성하는 효과적인 글쓰기 지도법 -Write It 활용 전략", product:"Write It", date:"2025-07-17", kind:"혼강세미나", applied:129, attended:62, instructor:"정효진", video:"https://youtube.com/live/dNDLyvBbndY?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"사립학교 국제학교아이들에게 인기있는 공부방 운영하기", product:"", date:"2025-07-26", kind:"공부방세미나", applied:119, attended:45, instructor:"리즈쌤\n/라랑스", video:"https://youtube.com/live/MMi33pSh4mU?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"초등 고학년 독립읽기 프로젝트!\n-Insight Link 활용 읽기 지도 전략", product:"Insight Link", date:"2025-08-21", kind:"혼강세미나", applied:174, attended:60, instructor:"박지요", video:"https://youtube.com/live/o3u1pe7BcRs?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"초등부터 준비하는 온라인 입시영어", product:"", date:"2025-08-30", kind:"공부방세미나", applied:206, attended:77, instructor:"샬롯샘\n/라랑스", video:"https://youtube.com/live/_Kq3rrldje0?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"[청취닷컴 x 클래스카드] 수익률 높이는 학원 경영 세팅법", product:"", date:"2025-09-20", kind:"공부방세미나", applied:187, attended:61, instructor:"제니퍼\n(청취)", video:"https://youtube.com/live/1rfz_mRVksM?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"단어의 진짜 힘을 키우는, 입체적 어휘 수업법\n-Word Up으로 ‘써먹는 어휘력’ 완성하기", product:"Word Up", date:"2025-09-25", kind:"혼강세미나", applied:203, attended:61, instructor:"이유진", video:"https://youtube.com/live/hK5qstfOi-o?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"기초부터 탄탄하게! 저레벨 독해 수업, 이렇게 시작하세요\n-Read it 시리즈로 기초부터 다지는 독해 수업법", product:"Read It", date:"2025-10-23", kind:"혼강세미나", applied:100, attended:65, instructor:"이유진", video:"https://youtube.com/live/kfwip-e2R-4?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"B&G 브랜드데이 행사(신간파닉스 오프라인 런칭 행사)", product:"Phonics Code", date:"2025-10-30", kind:"신간런칭세미나", applied:100, attended:47, instructor:"이유미", video:"https://youtu.be/hGVvrTuR9CM", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"Speaking Stage로 준비하는 영어말하기대회\n-말하기 자신감과 유창성을 한번에!", product:"Speaking Stage", date:"2025-11-06", kind:"혼강세미나", applied:137, attended:45, instructor:"박지요", video:"https://youtube.com/live/bTEkR2RjWa4?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"[빌드앤그로우 x 레디] 수업과 과제를 한 번에 해결하는 All-In-One 전략", product:"", date:"2025-11-22", kind:"공부방세미나", applied:147, attended:76, instructor:"김승규 \n대표(레디)", video:"https://youtube.com/live/b6URciwq090?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"스토리북과 문법이 만나는 초등 영어정독수업\n-OUP Readers+Grammar Stage", product:"Grammar Stage / Dominoes", date:"2025-12-11", kind:"혼강세미나", applied:194, attended:40, instructor:"정효진", video:"https://youtube.com/live/b6URciwq090?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"[빌드앤그로우 x 클래스카드] 링크시리즈 100% 활용하기 2탄", product:"", date:"2025-12-20", kind:"공부방세미나", applied:181, attended:50, instructor:"이화영\n(클카)", video:"https://youtube.com/live/Jy2T9q2di9A?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"파닉스코드 L4·L5, 수업이 막히는 지점 해결하는 실전 티칭팁", product:"Phonics Code", date:"2026-01-08", kind:"혼강세미나", applied:187, attended:80, instructor:"아일쌤", video:"https://youtube.com/live/WP33lbPFBxo?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"Beyond Limits: 영어전문공부방에서 영어학원으로 가는 로드맵", product:"", date:"2026-01-24", kind:"공부방세미나", applied:190, attended:55, instructor:"맥시멈영어학원 대표 원장", video:"https://youtube.com/live/iVrobkyq3eA?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"초등 비문학 리딩 수업 만들기 A to Z \n-초등 필수 리딩서 Subject Link 완벽 활용법\n(Subject Link 2ED)", product:"Subject Link", date:"2026-02-12", kind:"혼강세미나", applied:218, attended:43, instructor:"정효진", video:"https://youtube.com/live/Ox86iZRhbnw?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"[빌드앤그로우 x 원아워] \"개원 1년 만에 대기생 넘치는 학원 성장기\" 노하우", product:"", date:"2026-02-21", kind:"공부방세미나", applied:220, attended:55, instructor:"크리쌤", video:"https://youtube.com/live/loXKbMGwp9A?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"파닉스를 끝낸 초등을 위한 리딩+어휘 꿀조합 커리큘럼\n(요즘초등영단어+ Read It)", product:"Read It /요즘초등영단어", date:"2026-03-19", kind:"혼강세미나", applied:312, attended:91, instructor:"강지아", video:"https://youtube.com/live/lg7hsQXEVXg?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"[빌드앤그로우 x 라랑스] 어학원 같은 자기주도 완전학습 공부방 만들기 (커리큘럼 강화)", product:"", date:"2026-03-28", kind:"공부방세미나", applied:371, attended:79, instructor:"쥴리쌤", video:"https://youtube.com/live/8fIqsibsbbk?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"리딩X문법 시작과 끝은 빌드앤그로우와 함께\n(이지링크/영문법 링크)", product:"Easy Link / 중학영문법 Link", date:"2026-04-16", kind:"혼강세미나", applied:142, attended:37, instructor:"이지은(뿡샘)", video:"https://youtube.com/live/Ad7jP0pTJLM?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"AI 시대 영어교육의 방향: IB교육\n– IB Thinking 기반 영어원서·ELT 수업", product:"", date:"2026-04-25", kind:"공부방세미나", applied:154, attended:32, instructor:"맥시멈영어", video:"https://youtube.com/live/TaOej4kJiCk?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"파닉스 끝난 아이들, 이제 어떻게 리딩을 가르칠까?(Read It)", product:"Read It", date:"2026-05-14", kind:"혼강세미나", applied:236, attended:67, instructor:"양정운", video:"https://youtube.com/live/8r2D3sdygEU?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"고교학점제 시대, 변화된 입시 구조와 대학 합격 전략", product:"", date:"2026-05-23", kind:"공부방세미나", applied:239, attended:50, instructor:"김하민", video:"https://youtube.com/live/pjbD6hL16a4?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"예비중 영어, 길게 가져가며 빈틈 없이 다지는 중등 내신 설계", product:"능률VOCA/Reading Tutor/중학영문법 Link / Listening Stage", date:"2026-05-28", kind:"특집세미나", applied:135, attended:91, instructor:"강지아", video:"https://youtu.be/kE9mCE01mSc", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"파닉스에서 읽기로 넘어가는 순간 만들기\n• Come On Phonics로 설계하는 파닉스 수업 흐름", product:"Come on Phonics", date:"2026-06-11", kind:"혼강세미나", applied:211, attended:56, instructor:"노보리", video:"https://youtube.com/live/kdNoy7hHk5M?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"망하지 않는 학원! 살아남는 운영전략", product:"", date:"2026-06-20", kind:"공부방세미나", applied:209, attended:71, instructor:"김은경", video:"https://youtube.com/live/vstC8wnmjg4?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"[킹원장의 고등 전략] Part 1. 고등 입시 변화와 영어학원의 생존 전략", product:"", date:"2026-07-02", kind:"혼강세미나", applied:74, attended:30, instructor:"킹원장 / 맥시멈영어", video:"https://youtube.com/live/117uSlqul14?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"주니어랩 커리큘럼 확장의 기술(문법·리딩·스피킹을 연결하는 실제 운영 사례)", product:"Grammar Ten / 능률 VOCA", date:"2026-07-09", kind:"혼강세미나", applied:95, attended:40, instructor:"김지현 / 주랩송도2교실", video:"https://youtube.com/live/117uSlqul14?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"READ IT!으로 완성한 황원장의 브릿지 리딩 5원칙", product:"Read It", date:"2026-07-16", kind:"혼강세미나", applied:164, attended:81, instructor:"황보라", video:"https://youtube.com/live/YQr5Wp6o1oQ?feature=share", memo:"", source:"디지털마케팅 직접기획"},
+  {name:"등록률을 높이는 수업의 비밀 — 게임수업 & 문법수업 필살기 공개", product:"", date:"2026-07-25", kind:"공부방세미나", applied:178, attended:77, instructor:"쥴리쌤", video:"https://youtube.com/live/sKMrywm--Rk?feature=share", memo:"", source:"디지털마케팅 직접기획"}
+];
+
+const archiveWoahan = [
+  {name:"엄마표로 우리아이 영어루틴 만들기(4세-7세)", date:"2026-01-15", kind:"우아한세미나", instructor:"김향하", video:"", memo:""},
+  {name:"우리 아이 마음 키우기를 위한 책 대화법\n-엄마표 독서의 최종 목표는 사회 정서 키우기입니다", date:"2026-02-05", kind:"우아한세미나", instructor:"김지원", video:"", memo:""},
+  {name:"유치 → 초등 전환기, 엄마표 영어를 이어가는 방법", date:"2026-03-12", kind:"우아한세미나", instructor:"크리쌤", video:"", memo:""},
+  {name:"엄마표 영어, 혼자 하지 마세요", date:"2026-04-09", kind:"우아한세미나", instructor:"김향하", video:"", memo:""},
+  {name:"스스로 공부하는 아이의 영어 습관", date:"2026-05-17", kind:"우아한세미나", instructor:"이경희", video:"", memo:""},
+  {name:"듣고 있는데 말은 왜 안터질까요?-아웃풋의 임계점 넘기기", date:"2026-06-25", kind:"우아한세미나", instructor:"크리쌤", video:"", memo:""},
+  {name:"하루 10분, 엄마표 영단어 뽀개기로 단어 마스터하기", date:"2025-01-09", kind:"우아한세미나", instructor:"김향하", video:"https://www.instagram.com/p/DElmBHSvW3g/", memo:""},
+  {name:"문해력으로 키우는 엄마표 영어의 비밀", date:"2025-02-06", kind:"우아한세미나", instructor:"신혜진", video:"https://www.instagram.com/p/DFtuA-lTDVS/", memo:""},
+  {name:"아일쌤과 함께하는 생! 파! 생활 속 파닉스", date:"2025-03-06", kind:"우아한세미나", instructor:"아일쌤", video:"https://www.instagram.com/p/DG1yhd3PqOy/", memo:""},
+  {name:"국어 원장님이 알려주는 영어 잘하는 법/ \n모국어 실력이 영어실력의 기본이다!", date:"2025-04-03", kind:"우아한세미나", instructor:"기파랑", video:"https://www.instagram.com/p/DH9-X8Ez4M3/", memo:""},
+  {name:"엄마표영어 정체기 극복 가이드", date:"2025-05-08", kind:"우아한세미나", instructor:"크리쌤", video:"https://www.instagram.com/p/DJYBZMBzgCo/", memo:""},
+  {name:"우리 아이 성공을 이끄는 부모의 말", date:"2025-05-12", kind:"우아한세미나", instructor:"박지요", video:"https://www.instagram.com/p/DKyInbuv1JU/", memo:""},
+  {name:"영알못 엄마를 위한 엄마표영어 가이드(입문가이드)", date:"2025-07-10", kind:"우아한세미나", instructor:"크리쌤", video:"https://www.instagram.com/p/DMKG5mYTpoA/", memo:""},
+  {name:"학교에서 누구나 친해지고 싶은 아이 되는 10가지 방법 (머니브런치, 선생님)", date:"2025-08-07", kind:"우아한세미나", instructor:"임혜진\n선생님", video:"https://www.instagram.com/p/DNCVVRtPpod/", memo:""},
+  {name:"아이 연령에 맞게 가르치는 엄마표 영어", date:"2025-09-11", kind:"우아한세미나", instructor:"김향하", video:"https://www.instagram.com/p/DOdG-Hvj0JU/", memo:""},
+  {name:"모국어실력이 영어 실력의 기본이다! 2탄(기파랑)", date:"2025-10-16", kind:"우아한세미나", instructor:"정유진\n원장님", video:"https://www.instagram.com/p/DP2kYWRj1og/", memo:""},
+  {name:"아이 둘을 엄마표 영어로 키우며 겪었던 시행착오\n(엄마공부TV)<대치동을 이기는 엄마표 영어>", date:"2025-11-13", kind:"우아한세미나", instructor:"원희정 작가", video:"https://www.instagram.com/p/DQ-q0Thj6bN/", memo:""},
+  {name:"엄마표 영어 읽기 코칭: 음독, 청독, 묵독 편", date:"2025-12-04", kind:"우아한세미나", instructor:"크리쌤", video:"https://www.instagram.com/p/DR0vWQsj1tn/", memo:""}
+];
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let state = {
+  view: "browse",       // browse | form | confirm
+  tab: "progress",       // progress | archive
+  archiveFilter: "general", // general | woahan
+  searchQuery: "",
+  sortMode: "submitted_desc", // submitted_desc | submitted_asc | qtr
+  needs: [],
+  connection: 'loading',   // loading | live | local | error
+  loadError: '',
+  refreshing: false,
+  lastLoaded: null,
+  searchField: 'all',      // all | id | owner | dept | product | kind | target | text
+  filterStatus: 'all',
+  filterQtr: 'all',
+  deptOptions: DEPTS_DEFAULT.slice(),
+  formData: emptyForm(),
+  formErrors: {},
+  openHelp: {},
+  draftRestored: false,
+  lastSubmittedId: "",
+  highlightId: ""
+};
+
+function emptyForm(){
+  return {qtrYear:"", qtrQuarter:"", qtr:"", deptChoice:"", deptCustom:"", dept:"", owner:"",
+          productType:"", productName:"", productDetail:"", kind:"", targetSelected:[],
+          background:"", effect:"", ref:"", email:""};
+}
+
+/* 작성 중 내용 임시 저장 (브라우저에만 저장, 제출하면 자동 삭제) */
+const DRAFT_KEY = 'seminar-need-draft-v1';
+const draft = {
+  save(o){ try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(o)); }catch(e){} },
+  load(){ try{ const v = localStorage.getItem(DRAFT_KEY); return v ? JSON.parse(v) : null; }catch(e){ return null; } },
+  clear(){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
+};
+function hasContent(f){
+  if(!f) return false;
+  return !!(f.qtr || f.deptChoice || f.owner || f.productType || f.productName ||
+            f.productDetail || f.kind || (f.targetSelected && f.targetSelected.length) ||
+            f.background || f.effect || f.ref || f.email);
+}
+
+/* =========================================================
+   구글시트 연동 설정
+   Apps Script 배포 후 나오는 웹앱 URL을 아래에 붙여넣으면
+   실제 구글시트와 연동되어 동작합니다. 비워두면 브라우저 로컬 저장(테스트용)으로 동작합니다.
+   ========================================================= */
+const API_URL = "https://script.google.com/macros/s/AKfycbyfYLjVZnaHJld8TjSukzirSI5J9rKWuG2FuzV3jMqI_2WOmYKmgdMQXJevBNsSVSFT/exec"; // 예: "https://script.google.com/macros/s/AKfycb.../exec"
+
+/* 브라우저 저장소 안전 래퍼 (구글시트 미연동 시에만 사용) */
+const localStore = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+};
+
+async function loadStoredNeeds(isRefresh){
+  if(API_URL){
+    if(!isRefresh){
+      state.connection = 'loading';
+      render();
+    }
+    try{
+      const res = await fetch(API_URL, {method:'GET'});
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      let data;
+      try{
+        data = JSON.parse(text);
+      }catch(parseErr){
+        // JSON이 아니라 HTML(구글 로그인 페이지)이 돌아온 경우
+        throw new Error('AUTH');
+      }
+      if(!data.ok) throw new Error(data.error || '시트에서 오류를 반환했습니다.');
+      state.needs = Array.isArray(data.needs) ? data.needs : [];
+      if(Array.isArray(data.depts) && data.depts.length){
+        state.deptOptions = data.depts;
+      }
+      state.connection = 'live';
+      state.loadError = '';
+      state.lastLoaded = new Date();
+      render();
+      return;
+    }catch(e){
+      // 연동 실패 시 목업 데이터를 실데이터처럼 보여주지 않고 오류 상태로 명확히 표시
+      console.error('구글시트 연동 실패:', e);
+      state.needs = [];
+      state.connection = 'error';
+      state.loadError = (e && e.message) ? e.message : '알 수 없는 오류';
+      render();
+      return;
+    }
+  }
+  // 구글시트 미연동(로컬 데모) 모드
+  state.connection = 'local';
+  state.lastLoaded = new Date();
+  try{
+    const raw = localStore.get('needs-submissions');
+    state.needs = raw ? seedNeeds.concat(JSON.parse(raw)) : seedNeeds.slice();
+  }catch(e){
+    state.needs = seedNeeds.slice();
+  }
+  render();
+}
+
+function retryLoad(){ loadStoredNeeds(); }
+
+/* 구글시트 데이터를 원하는 시점에 다시 불러오기 (검색·필터 조건은 유지) */
+async function refreshNeeds(){
+  if(state.refreshing) return;
+  state.refreshing = true;
+  const btn = document.getElementById('refreshBtn');
+  if(btn){ btn.disabled = true; btn.classList.add('spin'); btn.querySelector('.txt').textContent = '불러오는 중'; }
+  try{
+    await loadStoredNeeds(true);
+  } finally {
+    state.refreshing = false;
+    renderOnly();
+  }
+}
+
+function stampText(){
+  if(!state.lastLoaded) return '';
+  const d = state.lastLoaded;
+  const pad = n => String(n).padStart(2,'0');
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} 기준`;
+}
+
+async function persistNeeds(){
+  const custom = state.needs.filter(n => !seedNeeds.find(sd => sd.id === n.id));
+  localStore.set('needs-submissions', JSON.stringify(custom));
+}
+
+/* =========================================================
+   NAV HELPERS
+   ========================================================= */
+function goToForm(){
+  state.view = "form";
+  state.formErrors = {};
+  state.openHelp = {};
+  const saved = draft.load();
+  if(hasContent(saved)){
+    state.formData = Object.assign(emptyForm(), saved);
+    state.draftRestored = true;
+  }else{
+    state.formData = emptyForm();
+    state.draftRestored = false;
+  }
+  render();
+  window.scrollTo(0,0);
+}
+function startFresh(){
+  draft.clear();
+  state.formData = emptyForm();
+  state.formErrors = {};
+  state.draftRestored = false;
+  render();
+  window.scrollTo(0,0);
+}
+function toggleHelp(key){
+  state.openHelp[key] = !state.openHelp[key];
+  render();
+}
+function goToBrowse(){
+  state.view = "browse";
+  render();
+}
+function switchTab(tab){
+  state.tab = tab;
+  render();
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.tab===tab);
+  });
+}
+function switchArchiveFilter(f){
+  state.archiveFilter = f;
+  render();
+}
+function toggleSubmittedSort(){
+  state.sortMode = (state.sortMode === 'submitted_desc') ? 'submitted_asc' : 'submitted_desc';
+  renderOnly();
+}
+function toggleQtrGrouping(){
+  state.sortMode = (state.sortMode === 'qtr') ? 'submitted_desc' : 'qtr';
+  renderOnly();
+}
+function sortNeeds(list){
+  const sorted = list.slice();
+  const sub = n => str(n.submitted);
+  if(state.sortMode === "submitted_desc"){
+    sorted.sort((a,b) => sub(b).localeCompare(sub(a)));
+  } else if(state.sortMode === "submitted_asc"){
+    sorted.sort((a,b) => sub(a).localeCompare(sub(b)));
+  } else if(state.sortMode === "qtr"){
+    sorted.sort((a,b) => {
+      let qa = QUARTERS_ALL.indexOf(str(a.qtr)), qb = QUARTERS_ALL.indexOf(str(b.qtr));
+      if(qa === -1) qa = 999; if(qb === -1) qb = 999;
+      if(qa !== qb) return qa - qb;
+      return sub(a).localeCompare(sub(b));
+    });
+  }
+  return sorted;
+}
+
+/* =========================================================
+   STEPPER LOGIC (signature element)
+   ========================================================= */
+function stepConfig(status){
+  const base = [
+    {label:"접수완료", key:"접수완료"},
+    {label:"검토중", key:"검토중"},
+  ];
+  if(status === "차기 검토"){
+    base.push({label:"차기 검토", key:"차기 검토", cls:"active-amber"});
+    base.push({label:"종료(재검토)", key:"__end__", cls:"muted-end"});
+  } else {
+    base.push({label:"수락(채택)", key:"수락(채택)", cls:"active-green"});
+    base.push({label:"완료", key:"완료", cls:"done-final"});
+  }
+  return base;
+}
+function renderStepper(status){
+  const steps = stepConfig(status);
+  const order = steps.map(s=>s.key);
+  let curIdx = order.indexOf(status);
+  if(curIdx === -1) curIdx = 0;
+  let html = '<div class="stepper">';
+  steps.forEach((s, i)=>{
+    let cls = "step";
+    if(i < curIdx) cls += " done";
+    else if(i === curIdx){
+      if(s.cls === "active-amber") cls += " active-amber";
+      else if(s.cls === "active-green" && status === "수락(채택)") cls += " active-green";
+      else if(s.key === "완료" && status === "완료") cls += " done";
+      else cls += " done";
+    } else if(s.key === "__end__"){
+      cls += " muted-end";
+    }
+    html += `<div class="${cls}"><div class="line"></div><div class="dot"></div><div class="lbl">${s.label}</div></div>`;
+  });
+  html += '</div>';
+  return html;
+}
+function badgeFor(status){
+  const map = {
+    "접수완료":"gray", "검토중":"blue", "수락(채택)":"green", "차기 검토":"amber", "완료":"navy"
+  };
+  const st = str(status) || '접수완료';
+  return `<span class="badge ${map[st]||'gray'}">${escapeHtml(st)}</span>`;
+}
+
+/* =========================================================
+   RENDER: BROWSE - PROGRESS TAB
+   ========================================================= */
+function renderProgressList(){
+  const total = state.needs.length;
+  const q = state.searchQuery.trim().toLowerCase();
+  let list = state.needs.slice();
+
+  if(state.filterStatus !== 'all'){
+    list = list.filter(n => str(n.status) === state.filterStatus);
+  }
+  if(state.filterQtr !== 'all'){
+    list = list.filter(n => str(n.qtr) === state.filterQtr);
+  }
+  if(q){
+    list = list.filter(n => matchesSearch(n, q, state.searchField));
+  }
+  list = sortNeeds(list);
+
+  // 기수 선택지는 실제 접수된 값에서만 생성 (등록 순서대로 정렬)
+  const qtrsInUse = Array.from(new Set(state.needs.map(n => str(n.qtr)).filter(Boolean)))
+    .sort((a,b) => {
+      let ia = QUARTERS_ALL.indexOf(a), ib = QUARTERS_ALL.indexOf(b);
+      if(ia === -1) ia = 999; if(ib === -1) ib = 999;
+      return ia - ib;
+    });
+  const dateArrow = state.sortMode === 'submitted_asc' ? '▲' : (state.sortMode === 'submitted_desc' ? '▼' : '↕');
+
+  const connMap = {
+    loading: {cls:'', txt:'구글시트에서 불러오는 중입니다'},
+    live:    {cls:'live', txt:'구글시트 연동 — 실시간 반영'},
+    local:   {cls:'local', txt:'로컬 데모 모드 — 구글시트 미연동, 이 브라우저에만 저장됩니다'},
+    error:   {cls:'', txt:''}
+  };
+  const conn = connMap[state.connection] || connMap.loading;
+
+  const fieldDef = SEARCH_FIELDS.find(f => f.key === state.searchField) || SEARCH_FIELDS[0];
+  const placeholders = {
+    all:'접수번호, 작성자, 제품명, 내용 등 무엇이든 입력해보세요',
+    id:'접수번호 (예: N-2026-003)',
+    owner:'작성자 이름 (예: 김민수)',
+    dept:'요청부서 (예: 채널마케팅본부)',
+    product:'제품·서비스명 (예: Reading Town)',
+    kind:'세미나종류 (예: 혼강세미나)',
+    target:'목표고객 (예: 초등, 학원장)',
+    text:'요청사유·기대효과 본문 검색'
+  };
+
+  let html = `
+    <div class="toolbar">
+      <div class="search-bar">
+        <select class="ctrl ${state.searchField!=='all'?'on':''}" onchange="setSearchField(this.value)" aria-label="검색 대상">
+          ${SEARCH_FIELDS.map(f => `<option value="${f.key}" ${state.searchField===f.key?'selected':''}>${f.label}</option>`).join('')}
+        </select>
+        <input type="text" id="progressSearch" placeholder="${escapeAttr(placeholders[state.searchField] || placeholders.all)}"
+          value="${escapeAttr(state.searchQuery)}" oninput="onSearchInput(this.value)">
+      </div>
+      <div class="filter-row">
+        <select class="ctrl ${state.filterStatus!=='all'?'on':''}" onchange="setStatusFilter(this.value)" aria-label="상태 필터">
+          <option value="all">상태 전체</option>
+          ${STATUS_OPTIONS.map(o => `<option value="${escapeAttr(o)}" ${state.filterStatus===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}
+        </select>
+        <select class="ctrl ${state.filterQtr!=='all'?'on':''}" onchange="setQtrFilter(this.value)" aria-label="기수 필터">
+          <option value="all">기수 전체</option>
+          ${qtrsInUse.map(o => `<option value="${escapeAttr(o)}" ${state.filterQtr===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}
+        </select>
+        <button type="button" class="pill ${state.sortMode==='qtr'?'active':''}" onclick="toggleQtrGrouping()">기수별로 묶어보기</button>
+        ${hasActiveFilter() ? `<button type="button" class="pill ghost" onclick="clearFilters()">검색·필터 초기화</button>` : ''}
+        <button type="button" class="refresh-btn ${state.refreshing?'spin':''}" id="refreshBtn" onclick="refreshNeeds()" ${state.refreshing?'disabled':''}>
+          <span class="ico"></span><span class="txt">${state.refreshing ? '불러오는 중' : '새로고침'}</span>
+        </button>
+      </div>
+    </div>`;
+
+  if(state.connection === 'error'){
+    const isAuth = state.loadError === 'AUTH';
+    html += `<div class="notice err">
+        <span><b>구글시트에서 목록을 불러오지 못했습니다.</b><br>${
+          isAuth
+          ? `Apps Script 웹앱의 <b>액세스 권한이 "모든 사용자"가 아닙니다.</b> 아래 순서로 조치해주세요.
+             <span style="display:block;margin-top:6px;opacity:.9;font-size:12px;line-height:1.7;">
+             1. 구글시트 → 확장 프로그램 → Apps Script<br>
+             2. 배포 → 배포 관리 → 연필(수정)<br>
+             3. 액세스 권한을 <b>"모든 사용자"</b>로 변경<br>
+             4. 버전 <b>"새 버전"</b> 선택 후 배포</span>`
+          : `네트워크 상태를 확인하신 뒤 다시 시도해주세요.
+             <span style="display:block;margin-top:4px;opacity:.75;font-size:11.5px;">사유: ${escapeHtml(state.loadError)}</span>`
+        }</span>
+        <span class="n-act"><button type="button" onclick="retryLoad()">다시 불러오기</button></span>
+      </div>`;
+  } else {
+    html += `<div class="notice">
+        <span><b>목록에는 작성자·요청부서를 표시하지 않습니다.</b> 본인이 제출하신 건은 접수번호 또는 작성자 이름으로 검색해 확인하실 수 있습니다.</span>
+      </div>
+      <div class="result-line">
+        <span><b>${list.length}건</b> 표시 ${total !== list.length ? `· 전체 ${total}건` : ''}</span>
+        <span class="conn ${conn.cls}" style="margin:0;"><span class="led"></span>${conn.txt}${state.lastLoaded ? ` · ${stampText()}` : ''}</span>
+      </div>`;
+  }
+
+  if(list.length === 0){
+    if(state.connection === 'error') return html;
+    html += `<div class="empty"><div class="big">${hasActiveFilter() ? '검색 결과 없음' : '접수 내역 없음'}</div>${
+      hasActiveFilter()
+        ? `조건에 맞는 요청서가 없습니다.${
+            state.searchField !== 'all'
+              ? ` 지금은 <b>${escapeHtml(fieldDef.label)}</b>만 찾고 있습니다. 검색 대상을 <b>전체 항목</b>으로 바꿔보세요.`
+              : ' 검색어나 필터 조건을 바꿔보세요.'
+          }<br><br><button type="button" class="pill" onclick="clearFilters()">검색·필터 초기화</button>`
+        : '아직 접수된 요청서가 없습니다.<br>상단의 새 요청서 작성 버튼으로 첫 요청을 남겨보세요.'
+    }</div>`;
+    return html;
+  }
+
+  html += `<div class="archive-table-wrap"><table class="archive-table"><thead><tr>
+    <th class="col-date sortable" onclick="toggleSubmittedSort()">제출일 <span class="sort-arrow">${dateArrow}</span></th><th>상태</th><th class="col-qtr">대상기수</th>
+    <th class="col-kind">세미나종류</th><th class="col-product">제품·서비스</th><th>목표고객</th>
+    <th class="col-reason">요청 사유(배경)</th><th class="col-reason">기대효과</th><th>접수번호</th>
+  </tr></thead><tbody>`;
+
+  let lastGroup = null;
+  list.forEach(n=>{
+    if(state.sortMode === 'qtr' && n.qtr !== lastGroup){
+      lastGroup = n.qtr;
+      html += `<tr><td colspan="9" class="table-group-row">${escapeHtml(n.qtr)}</td></tr>`;
+    }
+    const isNew = state.highlightId && n.id === state.highlightId;
+    html += `<tr class="${isNew ? 'row-highlight' : ''}" onclick="openDetail('${escapeAttr(n.id)}')">`;
+    html += `<td class="mono col-date">${escapeHtml(str(n.submitted).slice(0,10))}${isNew ? ' <span class="new-flag-inline">NEW</span>' : ''}</td>`;
+    html += `<td>${badgeFor(n.status)}</td>`;
+    html += `<td class="col-qtr">${hl(n.qtr, q)}</td>`;
+    html += `<td class="col-kind"><span class="kind-chip">${hl(n.kind, q)}</span></td>`;
+    html += `<td class="col-product"><span class="type-tag">${escapeHtml(n.productType)}</span><strong>${hl(n.productName, q)}</strong><br><span class="cell-sub">${hl(n.productDetail, q)}</span></td>`;
+    html += `<td>${hl(n.target, q)}</td>`;
+    html += `<td class="cell-wide col-reason">${hl(n.background, q)}</td>`;
+    html += `<td class="cell-wide col-reason">${hl(n.effect, q)}</td>`;
+    html += `<td class="mono">${hl(n.id, q)}</td>`;
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table></div>`;
+  return html;
+}
+
+/* =========================================================
+   RENDER: BROWSE - ARCHIVE TAB
+   ========================================================= */
+function renderArchiveList(){
+  const data = state.archiveFilter === "general" ? archiveGeneral : archiveWoahan;
+  let html = `
+    <div class="filter-pills">
+      <button type="button" class="pill ${state.archiveFilter==='general'?'active':''}" onclick="switchArchiveFilter('general')">일반세미나 ${archiveGeneral.length}건</button>
+      <button type="button" class="pill ${state.archiveFilter==='woahan'?'active':''}" onclick="switchArchiveFilter('woahan')">우아한세미나(종료) ${archiveWoahan.length}건</button>
+    </div>
+  `;
+  if(state.archiveFilter === 'woahan'){
+    html += `<div class="notice"><span>종료된 시리즈입니다. 신규 진행 없이 <b>열람 전용</b>으로 보존됩니다.</span></div>`;
+  }
+
+  html += `<div class="archive-table-wrap"><table class="archive-table"><thead><tr>`;
+  if(state.archiveFilter === 'general'){
+    html += `<th class="col-date">날짜</th><th class="col-kind">종류</th><th class="col-product">교재·서비스</th><th class="col-title">세미나명</th><th>신청</th><th>참석</th><th>참석률</th><th>강사·학원</th><th>영상</th><th>메모</th><th>출처</th>`;
+  } else {
+    html += `<th class="col-date">날짜</th><th class="col-kind">종류</th><th class="col-title">세미나명</th><th>강사·학원</th><th>영상</th><th>메모</th>`;
+  }
+  html += `</tr></thead><tbody>`;
+
+  data.forEach((a, idx)=>{
+    const rate = (a.applied ? Math.round((a.attended/a.applied)*1000)/10 : null);
+    html += `<tr onclick="openArchiveDetail('${state.archiveFilter}', ${idx})">`;
+    html += `<td class="mono col-date">${escapeHtml(a.date)}</td>`;
+    html += `<td class="col-kind"><span class="kind-chip">${escapeHtml(a.kind)}</span></td>`;
+    if(state.archiveFilter === 'general'){
+      html += `<td class="col-product">${escapeHtml(a.product)}</td>`;
+    }
+    html += `<td class="cell-wide col-title" title="${escapeAttr(a.name)}">${escapeHtml(a.name)}</td>`;
+    if(state.archiveFilter === 'general'){
+      html += `<td>${a.applied ?? ''}</td><td>${a.attended ?? ''}</td><td>${rate!==null ? rate+'%' : ''}</td>`;
+    }
+    html += `<td>${escapeHtml(a.instructor)}</td>`;
+    html += `<td class="cell-link" title="${escapeAttr(a.video)}">${a.video ? '링크' : ''}</td>`;
+    html += `<td class="cell-wide">${escapeHtml(a.memo)}</td>`;
+    if(state.archiveFilter === 'general'){
+      html += `<td>${escapeHtml(a.source)}</td>`;
+    }
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table></div>`;
+  return html;
+}
+
+/* =========================================================
+   DETAIL SHEETS
+   ========================================================= */
+function openDetail(id){
+  const n = state.needs.find(x=>x.id===id);
+  if(!n) return;
+  const html = `
+  <div class="sheet-backdrop" onclick="if(event.target===this) closeSheet()">
+    <div class="sheet sheet-wrap">
+      <button class="sheet-close" onclick="closeSheet()">✕</button>
+      <div class="sheet-handle"></div>
+      <h2>${escapeHtml(n.productName)} · ${escapeHtml(n.productDetail)}</h2>
+      <div class="sheet-code mono">${escapeHtml(n.id)} · ${escapeHtml(n.productType)}</div>
+      ${renderStepper(n.status)}
+      <div class="sheet-section">
+        <div class="kv"><div class="k">대상기수</div><div class="v">${escapeHtml(n.qtr)}</div></div>
+        <div class="kv"><div class="k">세미나종류</div><div class="v">${escapeHtml(n.kind)}</div></div>
+        <div class="kv"><div class="k">목표고객</div><div class="v">${escapeHtml(n.target)}</div></div>
+        <div class="kv"><div class="k">요청사유</div><div class="v">${escapeHtml(n.background)}</div></div>
+        <div class="kv"><div class="k">기대효과</div><div class="v">${escapeHtml(n.effect)}</div></div>
+        <div class="kv"><div class="k">제출일시</div><div class="v">${escapeHtml(n.submitted)}</div></div>
+      </div>
+      ${n.ref ? `<div class="sheet-section"><div class="k" style="font-size:13px;font-weight:800;margin-bottom:8px;">참고자료</div><div class="link-box">${escapeHtml(n.ref)}</div></div>` : ''}
+      ${n.holdReason ? `<div class="reason-box"><strong>차기 검토 사유</strong><br>${escapeHtml(n.holdReason)}</div>` : ''}
+      ${n.email ? `<div class="sheet-section"><div class="kv"><div class="k">알림 이메일</div><div class="v">${escapeHtml(n.email)}</div></div></div>` : `<div class="sheet-section"><div class="link-box">알림 이메일 미입력 — 상태가 바뀌어도 메일이 발송되지 않습니다. 이 화면에서 직접 확인해주세요.</div></div>`}
+    </div>
+  </div>`;
+  openSheetLayer(html);
+}
+function openArchiveDetail(filter, idx){
+  const a = (filter === 'general' ? archiveGeneral : archiveWoahan)[idx];
+  const rate = a.applied ? Math.round((a.attended/a.applied)*1000)/10 : null;
+  const html = `
+  <div class="sheet-backdrop" onclick="if(event.target===this) closeSheet()">
+    <div class="sheet sheet-wrap">
+      <button class="sheet-close" onclick="closeSheet()">✕</button>
+      <div class="sheet-handle"></div>
+      <h2>${escapeHtml(a.name)}</h2>
+      <div class="sheet-code mono">${escapeHtml(a.date)} · ${escapeHtml(a.kind)}</div>
+      <div class="sheet-section">
+        <div class="kv"><div class="k">강사·학원</div><div class="v">${escapeHtml(a.instructor)}</div></div>
+        ${a.product ? `<div class="kv"><div class="k">교재·서비스</div><div class="v">${escapeHtml(a.product)}</div></div>` : ''}
+        ${rate!==null ? `<div class="kv"><div class="k">신청/참석</div><div class="v">${a.applied}명 신청 · ${a.attended}명 참석 (${rate}%)</div></div>` : ''}
+        ${a.source ? `<div class="kv"><div class="k">출처</div><div class="v">${escapeHtml(a.source)}</div></div>` : ''}
+      </div>
+      ${a.video ? `<div class="sheet-section"><div class="k" style="font-size:13px;font-weight:800;margin-bottom:8px;">영상</div><div class="link-box"><a href="${escapeAttr(a.video)}" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">${escapeHtml(a.video)}</a></div></div>` : ''}
+    </div>
+  </div>`;
+  openSheetLayer(html);
+}
+function openSheetLayer(html){
+  document.getElementById('sheetLayer').innerHTML = html;
+  document.body.style.overflow = 'hidden';
+}
+function closeSheet(){
+  document.getElementById('sheetLayer').innerHTML = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && document.getElementById('sheetLayer').innerHTML) closeSheet();
+});
+
+/* =========================================================
+   RENDER: FORM
+   ========================================================= */
+/* 필수 항목 정의 — 진행률 표시와 제출 검증에 함께 사용 */
+const REQUIRED_STEPS = [
+  {key:"qtr",        label:"세미나 월",   msg:"세미나가 열렸으면 하는 시기를 골라주세요.",           ok:f=>!!f.qtr},
+  {key:"dept",       label:"요청부서",    msg:"요청부서를 선택하거나 직접 입력해주세요.",            ok:f=>!!resolveDept(f)},
+  {key:"owner",      label:"담당자",      msg:"담당자 이름을 적어주세요.",                          ok:f=>!!f.owner.trim()},
+  {key:"product",    label:"제품·서비스", msg:"제품 구분과 이름, 상세 내용을 모두 적어주세요.",      ok:f=>!!f.productType && !!f.productName.trim() && !!f.productDetail.trim()},
+  {key:"kind",       label:"세미나 종류", msg:"세미나 종류를 골라주세요.",                          ok:f=>!!f.kind},
+  {key:"target",     label:"목표고객",    msg:"목표고객을 하나 이상 골라주세요.",                    ok:f=>f.targetSelected.length>0},
+  {key:"background", label:"요청 사유",   msg:"이 세미나를 제안하는 배경을 적어주세요.",             ok:f=>!!f.background.trim()},
+  {key:"effect",     label:"기대효과",    msg:"이 세미나로 기대하는 효과를 적어주세요.",             ok:f=>!!f.effect.trim()}
+];
+
+function pickDept(i){
+  const list = state.deptOptions || DEPTS_DEFAULT;
+  setFormField('deptChoice', list[i]);
+}
+function resolveDept(f){
+  if(f.deptChoice === DEPT_CUSTOM) return (f.deptCustom || "").trim();
+  return f.deptChoice || "";
+}
+
+const HELP_TEXTS = {
+  background: `이렇게 적어주시면 검토가 빨라집니다.
+
+<span class="good">좋은 예</span>
+개정판 출시 이후 문법 지도 선생님들의 채택 문의가 이번 달에만 20건 넘게 들어오고 있습니다. 지난 3분기 설문에서도 문법 수업 운영법을 알고 싶다는 응답이 가장 많았습니다.
+
+<span class="bad">아쉬운 예</span>
+문법 교재 홍보가 필요합니다.
+
+→ <b>무슨 일이 있었는지</b>(문의 증가, 설문 결과, 현장 반응 등)를 한두 문장으로 적어주시면 충분합니다. 숫자가 있으면 더 좋지만, 없어도 괜찮습니다.`,
+  effect: `이 세미나가 끝났을 때 무엇이 달라지길 바라는지 적어주세요.
+
+<span class="good">좋은 예</span>
+개정판을 아직 검토하지 않은 선생님들이 실제 수업 흐름을 보고 채택을 검토하게 되는 것
+
+<span class="bad">아쉬운 예</span>
+매출 상승
+
+→ 매출·인지도처럼 큰 목표보다, <b>세미나 직후에 바로 확인할 수 있는 변화</b>로 적어주시면 좋습니다.`,
+  ref: `없어도 제출하실 수 있습니다. 있으면 검토가 훨씬 수월해집니다.
+
+· 관련 제품·서비스 소개자료
+· 유사 주제로 진행됐던 타 세미나 영상이나 자료
+· 추천하고 싶은 강사 후보 소개자료
+· 목표고객 반응 자료(설문, 후기, 문의 캡처 등)
+· 사내에서 이미 만들어 둔 기획안 링크
+
+여러 개일 때는 한 줄에 하나씩, 링크 뒤에 간단한 설명을 붙여주세요.`
+};
+
+function renderForm(){
+  const f = state.formData;
+  const err = state.formErrors || {};
+  const cls = k => err[k] ? " has-error" : "";
+  const msg = k => err[k] ? `<div class="err-msg">! ${err[k]}</div>` : "";
+  const nameLabel = f.productType === "서비스" ? "서비스명" : "교재명";
+  const namePlaceholder = f.productType === "서비스" ? "예: NE Tutor(AI), 온라인 진단평가 등" : "예: Reading Town, Grammar Bridge 등";
+  const filled = REQUIRED_STEPS.filter(st => st.ok(f)).length;
+  const total = REQUIRED_STEPS.length;
+  const allDone = filled === total;
+  const deptList = state.deptOptions || DEPTS_DEFAULT;
+  const isCustomDept = f.deptChoice === DEPT_CUSTOM;
+
+  const HELP_LABEL = {
+    background: "어떻게 적어야 할지 모르겠다면 — 예시 보기",
+    effect: "어떻게 적어야 할지 모르겠다면 — 예시 보기",
+    ref: "어떤 자료를 넣으면 좋을까요? — 예시 보기"
+  };
+  const helpBlock = (key) => `
+    <div class="disclose">
+      <button type="button" class="disclose-btn" onclick="toggleHelp('${key}')">
+        ${state.openHelp[key] ? "▾" : "▸"} ${HELP_LABEL[key]}
+      </button>
+      ${state.openHelp[key] ? `<div class="disclose-body">${HELP_TEXTS[key]}</div>` : ""}
+    </div>`;
+
+  return `
+    ${state.draftRestored ? `
+    <div class="draft-bar">
+      <span>이전에 작성하시던 내용을 불러왔습니다. 이어서 작성하시면 됩니다.</span>
+      <button type="button" onclick="startFresh()">새로 작성</button>
+    </div>` : ""}
+
+    <div class="guide">
+      <h3><span class="dot"></span>작성 전에 잠깐 확인해주세요</h3>
+      <ul>
+        <li><b>2~3분</b>이면 충분합니다. 별표(<span style="color:#C24E4E">*</span>)가 붙은 <b>8개 항목</b>만 채우시면 제출됩니다.</li>
+        <li>작성 중인 내용은 <b>자동 저장</b>됩니다. 중간에 창을 닫으셔도 다시 들어오시면 이어서 쓰실 수 있습니다.</li>
+        <li>전문적으로 쓰지 않으셔도 됩니다. <b>평소 말씀하시듯</b> 적어주시면 디지털마케팅팀이 세미나 형태로 정리합니다.</li>
+        <li>제출하신 요청서는 <b>진행현황</b> 화면에서 검토 상태를 직접 확인하실 수 있습니다.</li>
+      </ul>
+      <div class="guide-note">
+        요청서는 <b>분기 단위로 모아서</b> 검토합니다. 대상 분기의 접수 마감일이 지난 뒤 들어온 요청은 <b>다음 분기에 우선 검토</b>되니, 급하지 않으시더라도 떠오르실 때 미리 남겨주시면 좋습니다.
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-head">
+        <span class="lbl">필수 항목 작성 현황</span>
+        <span class="cnt ${allDone ? "done" : ""}">${allDone ? "모두 작성 완료" : `${filled} / ${total}`}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill ${allDone ? "done" : ""}" style="width:${Math.round(filled/total*100)}%"></div></div>
+    </div>
+
+    <div class="section-label">기본 정보</div>
+
+    <div class="field${cls("qtr")}" data-field="qtr">
+      <label><span class="field-num">1</span>요청하시는 세미나 월<span class="req">*</span></label>
+      <div class="btn-group">
+        ${YEARS.map(y => `<button type="button" class="choice-btn ${f.qtrYear===y?"selected":""}" onclick="setFormField('qtrYear','${y}')">${y}년</button>`).join("")}
+      </div>
+      ${f.qtrYear ? `
+      <div class="btn-group" style="margin-top:8px;">
+        ${QUARTER_DEFS.map(qd => `<button type="button" class="choice-btn ${f.qtrQuarter===qd.label?"selected":""}" onclick="setFormField('qtrQuarter','${qd.label}')">${qd.label}</button>`).join("")}
+      </div>` : ""}
+      ${f.qtr ? `<div class="picked">선택하신 시기: <b>${escapeHtml(f.qtr)}</b></div>` : ""}
+      <div class="help">연도를 먼저 고르시면 분기 선택이 나타납니다. 정확한 날짜까지는 정하지 않으셔도 되고, 열렸으면 하는 시기만 골라주시면 됩니다.</div>
+      ${msg("qtr")}
+    </div>
+
+    <div class="field${cls("dept")}" data-field="dept">
+      <label><span class="field-num">2</span>요청부서<span class="req">*</span></label>
+      <div class="btn-group">
+        ${deptList.map((d,i) => `<button type="button" class="choice-btn ${f.deptChoice===d?"selected":""}" onclick="pickDept(${i})">${escapeHtml(d)}</button>`).join("")}
+        <button type="button" class="choice-btn add-btn ${isCustomDept?"selected":""}" onclick="setFormField('deptChoice','${DEPT_CUSTOM}')">+ 직접 입력</button>
+      </div>
+      ${isCustomDept ? `
+      <div class="dept-custom">
+        <input type="text" placeholder="예: 디지털서비스본부, ELT사업본부, 콘텐츠개발본부"
+          value="${escapeAttr(f.deptCustom)}" oninput="setFormField('deptCustom', this.value)">
+      </div>` : ""}
+      <div class="help">목록에 소속 부서가 없으시면 <b>+ 직접 입력</b>을 눌러 부서명을 적어주세요. 본부·팀 어느 단위로 적으셔도 괜찮습니다.</div>
+      ${msg("dept")}
+    </div>
+
+    <div class="field${cls("owner")}" data-field="owner">
+      <label><span class="field-num">3</span>담당자<span class="req">*</span></label>
+      <input type="text" placeholder="이름을 입력해주세요" value="${escapeAttr(f.owner)}" oninput="setFormField('owner', this.value)">
+      <div class="help">검토 중 여쭤볼 내용이 생겼을 때 연락드릴 분의 이름입니다. 진행현황 목록에는 표시되지 않습니다.</div>
+      ${msg("owner")}
+    </div>
+
+    <div class="field${cls("product")}" data-field="product">
+      <label><span class="field-num">4</span>제품·서비스<span class="req">*</span></label>
+      <div class="btn-group">
+        ${PRODUCT_TYPES.map(pt => `<button type="button" class="choice-btn ${f.productType===pt?"selected":""}" onclick="setFormField('productType','${pt}')">${pt}</button>`).join("")}
+      </div>
+      ${f.productType ? `
+      <div class="sub-caption">${nameLabel}</div>
+      <input type="text" placeholder="${namePlaceholder}"
+        value="${escapeAttr(f.productName)}" oninput="setFormField('productName', this.value)">
+      <div class="sub-caption" style="margin-top:10px;">상세 내용</div>
+      <input type="text" placeholder="예: 겨울방학 특강 세트, 개정판 중1~3 세트 등"
+        value="${escapeAttr(f.productDetail)}" oninput="setFormField('productDetail', this.value)">
+      <div class="help">어떤 범위를 다뤘으면 하시는지 적어주세요. 학년, 시리즈, 세트 단위처럼 <b>구체적일수록</b> 강사 섭외가 수월해집니다.</div>
+      ` : `<div class="help">먼저 교재인지 서비스인지 골라주세요. 고르시면 이름을 적는 칸이 나타납니다.</div>`}
+      ${msg("product")}
+    </div>
+
+    <div class="field${cls("kind")}" data-field="kind">
+      <label><span class="field-num">5</span>세미나 종류<span class="req">*</span></label>
+      <div class="btn-group">
+        ${SEMINAR_KIND_DEFS.map(kd => `<button type="button" class="choice-btn kind-btn ${f.kind===kd.label?"selected":""}" onclick="setFormField('kind','${kd.label}')">
+          <span class="kind-btn-title">${kd.label}</span>${kd.desc ? `<span class="kind-btn-desc">${kd.desc}</span>` : ""}
+        </button>`).join("")}
+      </div>
+      <div class="help">고르기 어려우시면 버튼 아래 설명을 참고해주세요. 검토 과정에서 더 맞는 종류로 조정될 수 있으니 편하게 선택하셔도 됩니다.</div>
+      ${msg("kind")}
+    </div>
+
+    <div class="field${cls("target")}" data-field="target">
+      <label><span class="field-num">6</span>목표고객<span class="req">*</span> <span class="opt">여러 개 선택 가능</span></label>
+      <div class="btn-group">
+        ${TARGET_OPTIONS.map(t => `<button type="button" class="choice-btn ${f.targetSelected.includes(t)?"selected":""}" onclick="toggleTargetTag('${t}')">${t}</button>`).join("")}
+      </div>
+      ${f.targetSelected.length ? `<div class="picked">선택하신 고객: <b>${f.targetSelected.join(" · ")}</b></div>` : ""}
+      <div class="help">이 세미나를 <b>누가 들었으면 하는지</b> 골라주세요. 학년(유치·초등·중등·고등)과 대상(학원장·강사·학부모·학생)을 함께 고르시면 가장 정확합니다.</div>
+      ${msg("target")}
+    </div>
+
+    <div class="field${cls("background")}" data-field="background">
+      <label><span class="field-num">7</span>요청 사유(배경)<span class="req">*</span></label>
+      <textarea placeholder="이 세미나가 왜 필요하다고 생각하셨는지 편하게 적어주세요.
+예: 최근 문의가 늘고 있음 / 지난 설문에서 요청이 많았음 / 경쟁사 대응이 필요함" oninput="setFormField('background', this.value)">${escapeHtml(f.background)}</textarea>
+      ${f.background.length ? `<div class="counter ${f.background.length<20 ? "warn" : ""}">${f.background.length}자${f.background.length<20 ? " · 조금만 더 적어주시면 좋습니다" : ""}</div>` : ""}
+      ${helpBlock("background")}
+      ${msg("background")}
+    </div>
+
+    <div class="field${cls("effect")}" data-field="effect">
+      <label><span class="field-num">8</span>기대효과<span class="req">*</span></label>
+      <textarea placeholder="이 세미나가 끝났을 때 무엇이 달라지길 바라시는지 적어주세요.
+예: 개정판 채택 확대 / 신규 서비스 체험 신청 유도" oninput="setFormField('effect', this.value)">${escapeHtml(f.effect)}</textarea>
+      ${helpBlock("effect")}
+      ${msg("effect")}
+    </div>
+
+    <div class="section-label">추가 정보 — 없으셔도 제출됩니다</div>
+
+    <div class="field">
+      <label><span class="field-num">9</span>참고자료<span class="opt">선택</span></label>
+      <textarea placeholder="예시)
+https://... - 작년 동계특강 반응자료
+https://... - 유사 주제 타 세미나 참고사례" oninput="setFormField('ref', this.value)">${escapeHtml(f.ref)}</textarea>
+      ${helpBlock("ref")}
+    </div>
+
+    <div class="field">
+      <label><span class="field-num">10</span>작성자 이메일<span class="opt">선택 · 알림용</span></label>
+      <input type="email" placeholder="you@example.com" value="${escapeAttr(f.email)}" oninput="setFormField('email', this.value)">
+      <div class="help">남겨주시면 검토 결과(수락 / 차기 검토)가 확정될 때 메일로 알려드립니다. 적지 않으셔도 <b>진행현황</b> 화면에서 언제든 확인하실 수 있습니다.</div>
+    </div>
+
+    <div class="submit-bar">
+      <button class="submit-btn" onclick="submitForm()">${allDone ? "제출하기" : `제출하기 (${total-filled}개 항목이 남았습니다)`}</button>
+    </div>
+  `;
+}
+
+function setFormField(key, val){
+  state.formData[key] = val;
+  const f = state.formData;
+  if(key === "qtrYear" || key === "qtrQuarter"){
+    f.qtr = (f.qtrYear && f.qtrQuarter) ? `${f.qtrYear}년 ${f.qtrQuarter}` : "";
+  }
+  if(key === "deptChoice" && val !== DEPT_CUSTOM){ f.deptCustom = ""; }
+  // 채워진 항목의 오류 표시는 즉시 해제
+  REQUIRED_STEPS.forEach(st => { if(state.formErrors[st.key] && st.ok(f)) delete state.formErrors[st.key]; });
+  draft.save(f);
+
+  const rerenderKeys = ["qtrYear","qtrQuarter","deptChoice","productType","kind"];
+  if(rerenderKeys.includes(key)){ render(); }
+  else { updateProgressBar(); }
+}
+
+function updateProgressBar(){
+  const f = state.formData;
+  const filled = REQUIRED_STEPS.filter(st => st.ok(f)).length;
+  const total = REQUIRED_STEPS.length;
+  const allDone = filled === total;
+  // 채워진 항목의 오류 표시를 화면에서도 즉시 지움
+  REQUIRED_STEPS.forEach(st => {
+    if(!st.ok(f)) return;
+    const el = document.querySelector(`.field[data-field="${st.key}"]`);
+    if(el && el.classList.contains("has-error")){
+      el.classList.remove("has-error");
+      const m = el.querySelector(".err-msg");
+      if(m) m.remove();
+    }
+  });
+  const fill = document.querySelector(".progress-fill");
+  const cnt = document.querySelector(".progress-head .cnt");
+  const btn = document.querySelector(".submit-btn");
+  if(fill){ fill.style.width = Math.round(filled/total*100) + "%"; fill.classList.toggle("done", allDone); }
+  if(cnt){ cnt.textContent = allDone ? "모두 작성 완료" : `${filled} / ${total}`; cnt.classList.toggle("done", allDone); }
+  if(btn && !btn.disabled){ btn.textContent = allDone ? "제출하기" : `제출하기 (${total-filled}개 항목이 남았습니다)`; }
+}
+
+function toggleTargetTag(tag){
+  const arr = state.formData.targetSelected;
+  const idx = arr.indexOf(tag);
+  if(idx === -1){ arr.push(tag); } else { arr.splice(idx,1); }
+  if(state.formErrors.target && arr.length) delete state.formErrors.target;
+  draft.save(state.formData);
+  render();
+}
+
+function showSubmitError(reason){
+  const wrap = document.getElementById('main');
+  if(!wrap) return;
+  const old = document.getElementById('submitError');
+  if(old) old.remove();
+  const div = document.createElement('div');
+  div.id = 'submitError';
+  div.className = 'notice err';
+  div.innerHTML = '<span><b>제출하지 못했습니다.</b> ' + escapeHtml(reason) + '</span>';
+  wrap.insertBefore(div, wrap.firstChild);
+  div.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+async function submitForm(){
+  const f = state.formData;
+  const oldErr = document.getElementById('submitError');
+  if(oldErr) oldErr.remove();
+  const finalTarget = f.targetSelected.join('·');
+  const finalDept = resolveDept(f);
+
+  // 미입력 항목을 화면에서 바로 알려주고 첫 항목으로 이동
+  const errs = {};
+  REQUIRED_STEPS.forEach(st => { if(!st.ok(f)) errs[st.key] = st.msg; });
+  if(Object.keys(errs).length){
+    state.formErrors = errs;
+    render();
+    const first = document.querySelector('.field.has-error');
+    if(first){
+      first.scrollIntoView({behavior:'smooth', block:'center'});
+      const input = first.querySelector('input, textarea');
+      if(input) setTimeout(()=>input.focus({preventScroll:true}), 350);
+    }
+    return;
+  }
+  state.formErrors = {};
+
+  const payload = {
+    qtr:f.qtr, dept:finalDept, owner:f.owner,
+    productType:f.productType, productName:f.productName, productDetail:f.productDetail, kind:f.kind,
+    target:finalTarget, background:f.background, effect:f.effect,
+    ref:f.ref, email:f.email
+  };
+
+  if(API_URL){
+    const submitBtn = document.querySelector('.submit-btn');
+    if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = '제출 중...'; }
+    try{
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain;charset=utf-8'}, // preflight 방지용
+        body: JSON.stringify(payload)
+      });
+      const text = await res.text();
+      let data;
+      try{
+        data = JSON.parse(text);
+      }catch(parseErr){
+        showSubmitError('Apps Script 웹앱의 액세스 권한이 "모든 사용자"로 설정되어 있지 않습니다. 관리자에게 문의해주세요. 작성하신 내용은 그대로 보관됩니다.');
+        if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = '제출하기'; }
+        return;
+      }
+      if(!data.ok){
+        showSubmitError(data.error || '알 수 없는 오류');
+        if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = '제출하기'; }
+        return;
+      }
+      state.needs.push({...payload, id:data.id, submitted:data.submitted, status:"접수완료", holdReason:""});
+      draft.clear();
+      state.draftRestored = false;
+      state.lastSubmittedId = data.id;
+      state.view = "confirm";
+      render();
+    }catch(e){
+      showSubmitError('네트워크 연결을 확인하신 뒤 다시 시도해주세요. 작성하신 내용은 그대로 보관됩니다.');
+      if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = '제출하기'; }
+    }
+    return;
+  }
+
+  // API 미설정 시 폴백: 로컬 저장(테스트용)
+  const year = new Date().getFullYear();
+  const seq = state.needs.length + 1;
+  const id = `N-${year}-${String(seq).padStart(3,'0')}`;
+  const now = new Date();
+  const submitted = now.toISOString().slice(0,16).replace('T',' ');
+  const newNeed = {...payload, id, submitted, status:"접수완료", holdReason:""};
+  state.needs.push(newNeed);
+  persistNeeds();
+  draft.clear();
+  state.draftRestored = false;
+  state.lastSubmittedId = id;
+  state.view = "confirm";
+  render();
+}
+
+/* =========================================================
+   RENDER: CONFIRM
+   ========================================================= */
+function renderConfirm(){
+  return `
+    <div class="confirm-wrap">
+      <div class="confirm-check">&#10003;</div>
+      <h2>접수가 완료됐어요</h2>
+      <div class="confirm-code mono">${state.lastSubmittedId}</div>
+      <p>요청서가 정상적으로 접수되었습니다. 위 접수번호로 진행 상황을 조회하실 수 있습니다.<br><br>
+      디지털마케팅팀이 분기 단위로 모아 검토하며, 결과가 확정되면 이메일을 남기신 경우 메일로 안내드립니다. 남기지 않으셨더라도 아래 <b>진행현황</b>에서 언제든 확인하실 수 있습니다.</p>
+      <button class="confirm-btn" onclick="goToProgressAfterSubmit()">진행현황에서 확인하기 →</button>
+    </div>
+  `;
+}
+function goToProgressAfterSubmit(){
+  state.view = "browse";
+  state.tab = "progress";
+  state.searchQuery = "";
+  state.highlightId = state.lastSubmittedId;
+  render();
+}
+
+/* =========================================================
+   MAIN RENDER
+   ========================================================= */
+function onSearchInput(v){
+  state.searchQuery = v;
+  state.highlightId = '';
+  renderOnly();
+}
+function setSearchField(v){ state.searchField = v; state.highlightId=''; renderOnly(); }
+function setStatusFilter(v){ state.filterStatus = v; state.highlightId=''; renderOnly(); }
+function setQtrFilter(v){ state.filterQtr = v; state.highlightId=''; renderOnly(); }
+function clearFilters(){
+  state.searchQuery = '';
+  state.searchField = 'all';
+  state.filterStatus = 'all';
+  state.filterQtr = 'all';
+  state.highlightId = '';
+  renderOnly();
+}
+function hasActiveFilter(){
+  return !!state.searchQuery || state.searchField !== 'all'
+      || state.filterStatus !== 'all' || state.filterQtr !== 'all';
+}
+
+/* 검색 대상 정의 — 라벨과 실제 조회 필드를 한 곳에서 관리 */
+const SEARCH_FIELDS = [
+  {key:'all',     label:'전체 항목',        pick:n => [n.id,n.owner,n.dept,n.productName,n.productDetail,n.productType,n.kind,n.target,n.qtr,n.background,n.effect,n.status]},
+  {key:'id',      label:'접수번호',          pick:n => [n.id]},
+  {key:'owner',   label:'작성자',            pick:n => [n.owner]},
+  {key:'dept',    label:'요청부서',          pick:n => [n.dept]},
+  {key:'product', label:'제품·서비스',       pick:n => [n.productName, n.productDetail, n.productType]},
+  {key:'kind',    label:'세미나종류',        pick:n => [n.kind]},
+  {key:'target',  label:'목표고객',          pick:n => [n.target]},
+  {key:'text',    label:'요청사유·기대효과', pick:n => [n.background, n.effect]}
+];
+const STATUS_OPTIONS = ['접수완료','검토중','수락(채택)','차기 검토','완료'];
+
+function matchesSearch(n, q, fieldKey){
+  const def = SEARCH_FIELDS.find(f => f.key === fieldKey) || SEARCH_FIELDS[0];
+  return def.pick(n).some(v => str(v).toLowerCase().includes(q));
+}
+
+/* 검색어와 일치하는 부분을 표시 (이스케이프 이후에 적용) */
+function hl(value, q){
+  const safe = escapeHtml(value);
+  if(!q) return safe;
+  const target = escapeHtml(q);
+  if(!target) return safe;
+  const esc = target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  try{
+    return safe.replace(new RegExp(esc, 'gi'), m => `<mark>${m}</mark>`);
+  }catch(e){ return safe; }
+}
+function renderOnly(){
+  // 목록만 다시 그리되, 검색창의 입력 위치(커서)는 그대로 유지
+  if(state.view === 'browse' && state.tab === 'progress'){
+    const listWrap = document.getElementById('progressListWrap');
+    if(listWrap){
+      const before = document.getElementById('progressSearch');
+      const pos = before ? before.selectionStart : null;
+      const wasFocused = !!before && document.activeElement === before;
+      listWrap.innerHTML = renderProgressList();
+      if(wasFocused){
+        const after = document.getElementById('progressSearch');
+        if(after){
+          after.focus({preventScroll:true});
+          if(pos !== null){ try{ after.setSelectionRange(pos, pos); }catch(e){} }
+        }
+      }
+      return;
+    }
+  }
+  render();
+}
+
+function render(){
+  const header = document.getElementById('header');
+  const app = document.getElementById('app');
+  const browseRow = document.getElementById('browseHeaderRow');
+  const browseTabs = document.getElementById('browseTabs');
+  const formRow = document.getElementById('formHeaderRow');
+  const main = document.getElementById('main');
+
+  const isWide = (state.view !== 'form' && state.view !== 'confirm');
+  app.classList.toggle('wide-view', isWide);
+
+  if(state.view === 'form'){
+    browseRow.classList.add('hidden');
+    browseTabs.classList.add('hidden');
+    formRow.classList.remove('hidden');
+    main.innerHTML = renderForm();
+    requestAnimationFrame(()=>{
+      document.documentElement.style.setProperty('--hdr-h', header.offsetHeight + 'px');
+    });
+  } else if(state.view === 'confirm'){
+    browseRow.classList.add('hidden');
+    browseTabs.classList.add('hidden');
+    formRow.classList.add('hidden');
+    main.innerHTML = renderConfirm();
+  } else {
+    browseRow.classList.remove('hidden');
+    browseTabs.classList.remove('hidden');
+    formRow.classList.add('hidden');
+    document.querySelectorAll('.tab-btn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.tab === state.tab);
+    });
+    if(state.tab === 'progress'){
+      main.innerHTML = `<div id="progressListWrap">${renderProgressList()}</div>`;
+    } else {
+      main.innerHTML = renderArchiveList();
+    }
+  }
+}
+
+function escapeHtml(str){
+  if(str === null || str === undefined || str === '') return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeAttr(str){
+  if(str === null || str === undefined || str === '') return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+/* 시트 값이 숫자·날짜여도 문자열로 안전하게 다루기 위한 헬퍼 */
+function str(v){ return (v === null || v === undefined) ? '' : String(v); }
+
+/* sheet layer container */
+const sheetLayer = document.createElement('div');
+sheetLayer.id = 'sheetLayer';
+document.body.appendChild(sheetLayer);
+
+/* init */
+loadStoredNeeds();
+</script>
+</body>
+</html>
