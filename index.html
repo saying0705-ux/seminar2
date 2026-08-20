@@ -255,38 +255,48 @@
   .pg-gap{color:var(--muted);font-size:12px;padding:0 2px;}
 
   /* ---------- Table ---------- */
+  /* 표 자체에는 세로 스크롤을 두지 않습니다.
+     선택한 개수(5·10·20건)가 항상 한 번에 보이고, 부족한 만큼만 페이지 전체가 움직입니다. */
   .archive-table-wrap{
-    border:1px solid var(--line);border-radius:var(--radius);overflow:auto;background:var(--surface);
-    max-height:calc(100vh - 300px);
+    border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+    overflow:visible;
   }
-  table.archive-table{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px;line-height:1.45;}
+  table.archive-table{
+    border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px;line-height:1.45;
+    table-layout:fixed;
+  }
   table.archive-table thead th{
-    position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;font-weight:600;
+    position:sticky;top:var(--hdr-h,0px);background:var(--navy);color:#fff;text-align:left;font-weight:600;
     padding:9px 12px;white-space:nowrap;z-index:2;font-size:12px;letter-spacing:-.01em;
     border-right:1px solid rgba(255,255,255,.14);
+    overflow:hidden;text-overflow:ellipsis;
   }
+  table.archive-table thead th:first-child{border-top-left-radius:var(--radius);}
+  table.archive-table thead th:last-child{border-top-right-radius:var(--radius);}
   table.archive-table thead th:last-child{border-right:none;}
-  table.archive-table thead th.sortable{cursor:pointer;user-select:none;position:relative;padding-right:22px;}
+  table.archive-table thead th.sortable{cursor:pointer;user-select:none;}
   table.archive-table thead th.sortable:hover{background:var(--navy-deep);}
   table.archive-table thead th.sortable.on{background:var(--navy-deep);}
-  .sort-arrow{
-    position:absolute;right:9px;top:50%;transform:translateY(-50%);
-    font-size:9px;opacity:.4;letter-spacing:-1px;
-  }
+  .th-in{display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;}
+  .th-in > span:first-child{overflow:hidden;text-overflow:ellipsis;}
+  .sort-arrow{font-size:9px;opacity:.4;letter-spacing:-1px;flex:none;}
   th.sortable.on .sort-arrow{opacity:1;}
   table.archive-table td{
-    padding:8px 12px;border-bottom:1px solid var(--line);color:var(--ink);
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:top;
+    padding:9px 12px;border-bottom:1px solid var(--line);color:var(--ink);
+    vertical-align:top;overflow:hidden;text-overflow:ellipsis;
+    word-break:break-word;
   }
   table.archive-table tbody tr:last-child td{border-bottom:none;}
-  table.archive-table td.cell-wide{white-space:normal;}
-  table.archive-table th.col-date, table.archive-table td.col-date{white-space:nowrap;width:122px;}
-  table.archive-table th.col-kind, table.archive-table td.col-kind{width:112px;}
-  table.archive-table th.col-qtr, table.archive-table td.col-qtr{width:142px;white-space:nowrap;}
-  table.archive-table th.col-product, table.archive-table td.col-product{min-width:230px;max-width:330px;white-space:normal;}
-  table.archive-table th.col-title, table.archive-table td.col-title{min-width:300px;max-width:440px;}
-  table.archive-table th.col-reason, table.archive-table td.col-reason{min-width:180px;max-width:250px;white-space:normal;}
-  table.archive-table td.cell-link{color:var(--blue);max-width:70px;font-weight:700;}
+  /* 긴 글은 두 줄까지만 보여주고 나머지는 줄임표로 접습니다. 전체 내용은 행을 눌러 확인합니다. */
+  .clamp2{
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;text-overflow:ellipsis;
+  }
+  table.archive-table td.col-date{white-space:nowrap;}
+  table.archive-table td.col-qtr{white-space:nowrap;}
+  table.archive-table td.cell-link{color:var(--blue);font-weight:700;}
+  table.archive-table th.num, table.archive-table td.num{padding-left:6px;padding-right:6px;text-align:right;}
+  table.archive-table th.num .th-in{justify-content:flex-end;}
   table.archive-table td.cell-sub, .cell-sub{color:var(--muted);font-size:11px;}
   table.archive-table tbody tr:nth-child(even){background:#FAFBFC;}
   table.archive-table tbody tr:hover{background:var(--navy-soft);cursor:pointer;}
@@ -506,6 +516,14 @@
 
   .hidden{display:none!important;}
 
+  /* 좁은 화면에서만 표를 가로로 밀어서 봅니다 */
+  @media (max-width:900px){
+    .archive-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+    table.archive-table{table-layout:auto;min-width:880px;}
+    table.archive-table thead th{position:static;}
+    table.archive-table colgroup{display:none;}
+  }
+
   @media (max-width:640px){
     .ob-backdrop{padding:12px;align-items:flex-start;padding-top:22px;}
     .ob-head{padding:20px 20px 18px 20px;}
@@ -527,9 +545,17 @@
     .archive-table-wrap{max-height:none;}
     .tabs{gap:18px;}
     .result-line{flex-direction:column;align-items:flex-start;gap:5px;}
-    select.ctrl{flex:1;min-width:0;max-width:none;}
-    .refresh-btn{margin-left:0;flex:1;justify-content:center;}
-    .filter-row .pill{flex:1;text-align:center;}
+    .search-bar{flex-direction:column;}
+    .search-bar select.ctrl{width:100%;max-width:none;}
+    .search-bar input{width:100%;}
+    /* 필터·버튼은 두 칸씩 나란히 — 좁은 화면에서 눌러야 할 만큼은 넓게 유지합니다 */
+    .filter-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .filter-row > *{width:100%;min-width:0;max-width:none;margin:0;}
+    .refresh-btn{justify-content:center;}
+    .filter-row .pill{text-align:center;}
+    .pager{flex-direction:column;align-items:stretch;gap:10px;}
+    .pager-left{justify-content:space-between;}
+    .pager-nav{justify-content:center;}
   }
 </style>
 </head>
@@ -1041,7 +1067,7 @@ function arrowFor(key){
 function thSort(key, extraClass){
   const on = state.sortKey === key;
   return `<th class="${extraClass||''} sortable ${on?'on':''}" onclick="sortBy('${key}')"
-    title="클릭하면 ${SORT_COLS[key].label} 기준으로 정렬됩니다">${SORT_COLS[key].label}${arrowFor(key)}</th>`;
+    title="클릭하면 ${SORT_COLS[key].label} 기준으로 정렬됩니다"><span class="th-in"><span>${SORT_COLS[key].label}</span>${arrowFor(key)}</span></th>`;
 }
 
 function toggleSubmittedSort(){
@@ -1248,7 +1274,12 @@ function renderProgressList(){
     return html;
   }
 
-  html += `<div class="archive-table-wrap"><table class="archive-table"><thead><tr>
+  html += `<div class="archive-table-wrap"><table class="archive-table">
+  <colgroup>
+    <col style="width:11%"><col style="width:8.5%"><col style="width:12.5%"><col style="width:10.5%">
+    <col style="width:17%"><col style="width:8.5%"><col style="width:12%"><col style="width:11%"><col style="width:9%">
+  </colgroup>
+  <thead><tr>
     ${thSort('submitted','col-date')}
     ${thSort('status')}
     ${thSort('qtr','col-qtr')}
@@ -1271,10 +1302,10 @@ function renderProgressList(){
     html += `<td>${badgeFor(n.status)}</td>`;
     html += `<td class="col-qtr">${hl(n.qtr, q)}</td>`;
     html += `<td class="col-kind"><span class="kind-chip">${hl(n.kind, q)}</span></td>`;
-    html += `<td class="col-product"><span class="type-tag">${escapeHtml(n.productType)}</span><strong>${hl(n.productName, q)}</strong><br><span class="cell-sub">${hl(n.productDetail, q)}</span></td>`;
-    html += `<td>${hl(n.target, q)}</td>`;
-    html += `<td class="cell-wide col-reason">${hl(n.background, q)}</td>`;
-    html += `<td class="cell-wide col-reason">${hl(n.effect, q)}</td>`;
+    html += `<td class="col-product"><div class="clamp2"><span class="type-tag">${escapeHtml(n.productType)}</span><strong>${hl(n.productName, q)}</strong></div><div class="cell-sub clamp2">${hl(n.productDetail, q)}</div></td>`;
+    html += `<td><div class="clamp2">${hl(n.target, q)}</div></td>`;
+    html += `<td title="${escapeAttr(n.background)}"><div class="clamp2">${hl(n.background, q)}</div></td>`;
+    html += `<td title="${escapeAttr(n.effect)}"><div class="clamp2">${hl(n.effect, q)}</div></td>`;
     html += `<td class="mono">${hl(n.id, q)}</td>`;
     html += `</tr>`;
   });
@@ -1311,7 +1342,7 @@ function aTh(key, cls){
   const on = state.archiveSortKey === key;
   const arrow = on ? (state.archiveSortDir === 'asc' ? '▲' : '▼') : '▲▼';
   return `<th class="${cls||''} sortable ${on?'on':''}" onclick="archiveSortBy('${key}')"
-    title="클릭하면 ${ARCHIVE_SORT[key].label} 기준으로 정렬됩니다">${ARCHIVE_SORT[key].label}<span class="sort-arrow">${arrow}</span></th>`;
+    title="클릭하면 ${ARCHIVE_SORT[key].label} 기준으로 정렬됩니다"><span class="th-in"><span>${ARCHIVE_SORT[key].label}</span><span class="sort-arrow">${arrow}</span></span></th>`;
 }
 function sortArchive(list){
   const def = ARCHIVE_SORT[state.archiveSortKey] || ARCHIVE_SORT.date;
@@ -1345,11 +1376,16 @@ function renderArchiveList(){
   }
   html += `<div class="result-line"><span><b>${data.length}건</b> · 표 머리글을 누르면 정렬됩니다</span></div>`;
 
-  html += `<div class="archive-table-wrap"><table class="archive-table"><thead><tr>`;
+  const cols = isGeneral
+    ? [13,9,12,21,6,6,7,12,4.5,9.5]
+    : [14,12,36,18,6,14];
+  html += `<div class="archive-table-wrap"><table class="archive-table">
+  <colgroup>${cols.map(w=>`<col style="width:${w}%">`).join('')}</colgroup>
+  <thead><tr>`;
   if(isGeneral){
     html += aTh('date','col-date') + aTh('kind','col-kind') + aTh('product','col-product') + aTh('name','col-title')
-          + aTh('applied') + aTh('attended') + aTh('rate') + aTh('instructor')
-          + `<th>영상</th><th>메모</th><th>출처</th>`;
+          + aTh('applied','num') + aTh('attended','num') + aTh('rate','num') + aTh('instructor')
+          + `<th>영상</th><th>메모</th>`;
   } else {
     html += aTh('date','col-date') + aTh('kind','col-kind') + aTh('name','col-title') + aTh('instructor')
           + `<th>영상</th><th>메모</th>`;
@@ -1365,18 +1401,15 @@ function renderArchiveList(){
     html += `<td class="col-date">${escapeHtml(dateKo(a.date))}</td>`;
     html += `<td class="col-kind"><span class="kind-chip">${escapeHtml(a.kind)}</span></td>`;
     if(isGeneral){
-      html += `<td class="col-product">${escapeHtml(a.product)}</td>`;
+      html += `<td class="col-product"><div class="clamp2">${escapeHtml(a.product)}</div></td>`;
     }
-    html += `<td class="cell-wide col-title" title="${escapeAttr(a.name)}">${escapeHtml(a.name)}</td>`;
+    html += `<td class="col-title" title="${escapeAttr(a.name)}"><div class="clamp2">${escapeHtml(a.name)}</div></td>`;
     if(isGeneral){
-      html += `<td>${a.applied ?? ''}</td><td>${a.attended ?? ''}</td><td>${rate!==null ? rate+'%' : ''}</td>`;
+      html += `<td class="num">${a.applied ?? ''}</td><td class="num">${a.attended ?? ''}</td><td class="num">${rate!==null ? rate+'%' : ''}</td>`;
     }
-    html += `<td>${escapeHtml(a.instructor)}</td>`;
+    html += `<td><div class="clamp2">${escapeHtml(a.instructor)}</div></td>`;
     html += `<td class="cell-link" title="${escapeAttr(a.video)}">${a.video ? '링크' : ''}</td>`;
-    html += `<td class="cell-wide">${escapeHtml(a.memo)}</td>`;
-    if(isGeneral){
-      html += `<td>${escapeHtml(a.source)}</td>`;
-    }
+    html += `<td title="${escapeAttr(a.memo)}"><div class="clamp2">${escapeHtml(a.memo)}</div></td>`;
     html += `</tr>`;
   });
 
@@ -1980,6 +2013,7 @@ function renderOnly(){
       const pos = before ? before.selectionStart : null;
       const wasFocused = !!before && document.activeElement === before;
       listWrap.innerHTML = renderProgressList();
+      requestAnimationFrame(syncHeaderHeight);
       if(wasFocused){
         const after = document.getElementById('progressSearch');
         if(after){
@@ -1992,6 +2026,13 @@ function renderOnly(){
   }
   render();
 }
+
+/* 상단 메뉴 높이를 CSS 변수로 전달 — 표 머리글이 메뉴 바로 아래에 붙어 따라옵니다 */
+function syncHeaderHeight(){
+  const header = document.getElementById('header');
+  if(header) document.documentElement.style.setProperty('--hdr-h', header.offsetHeight + 'px');
+}
+window.addEventListener('resize', syncHeaderHeight);
 
 function render(){
   const header = document.getElementById('header');
@@ -2009,9 +2050,6 @@ function render(){
     browseTabs.classList.add('hidden');
     formRow.classList.remove('hidden');
     main.innerHTML = renderForm();
-    requestAnimationFrame(()=>{
-      document.documentElement.style.setProperty('--hdr-h', header.offsetHeight + 'px');
-    });
   } else if(state.view === 'confirm'){
     browseRow.classList.add('hidden');
     browseTabs.classList.add('hidden');
@@ -2030,6 +2068,7 @@ function render(){
       main.innerHTML = renderArchiveList();
     }
   }
+  requestAnimationFrame(syncHeaderHeight);
 }
 
 function escapeHtml(str){
