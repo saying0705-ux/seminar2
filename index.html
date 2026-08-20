@@ -140,6 +140,120 @@
   .result-line .stamp{color:var(--muted);font-weight:600;}
   mark{background:var(--gold-soft);color:#6E4300;font-weight:800;padding:0 1px;border-radius:2px;}
 
+  /* ---------- 툴팁 ---------- */
+  .tip{position:relative;}
+  .tip::after{
+    content:attr(data-tip);
+    position:absolute;left:50%;top:calc(100% + 9px);transform:translateX(-50%) translateY(-4px);
+    background:var(--navy-deep);color:#fff;font-size:11.5px;font-weight:600;line-height:1.55;
+    padding:8px 11px;border-radius:5px;white-space:pre-line;width:max-content;max-width:230px;
+    opacity:0;pointer-events:none;transition:opacity .16s ease, transform .16s ease;z-index:30;
+    box-shadow:0 4px 14px rgba(8,30,60,.24);text-align:left;letter-spacing:-.01em;
+  }
+  .tip::before{
+    content:"";position:absolute;left:50%;top:calc(100% + 3px);transform:translateX(-50%);
+    border:5px solid transparent;border-bottom-color:var(--navy-deep);
+    opacity:0;pointer-events:none;transition:opacity .16s ease;z-index:31;
+  }
+  .tip:hover::after,.tip:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0);}
+  .tip:hover::before,.tip:focus-visible::before{opacity:1;}
+  @media (max-width:640px){ .tip::after,.tip::before{display:none;} }
+
+  /* ---------- 안내 팝업 ---------- */
+  .ob-backdrop{
+    position:fixed;inset:0;z-index:60;background:rgba(10,24,44,.52);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    animation:obFade .22s ease both;
+  }
+  .ob-backdrop.closing{animation:obFadeOut .18s ease both;}
+  @keyframes obFade{from{opacity:0}to{opacity:1}}
+  @keyframes obFadeOut{from{opacity:1}to{opacity:0}}
+  .ob-card{
+    background:var(--surface);border-radius:12px;max-width:540px;width:100%;
+    max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(8,26,52,.35);
+    animation:obRise .34s cubic-bezier(.2,.8,.25,1) both;
+  }
+  .ob-backdrop.closing .ob-card{animation:obSink .18s ease both;}
+  @keyframes obRise{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+  @keyframes obSink{from{opacity:1;transform:none}to{opacity:0;transform:translateY(12px) scale(.985)}}
+  .ob-head{background:var(--navy);color:#fff;padding:24px 28px 22px 28px;border-radius:12px 12px 0 0;}
+  .ob-head .eyebrow{font-size:11px;letter-spacing:.14em;font-weight:700;opacity:.72;margin-bottom:7px;}
+  .ob-head h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.03em;line-height:1.4;}
+  .ob-body{padding:24px 28px 8px 28px;}
+  .ob-flow{display:flex;align-items:center;gap:6px;margin-bottom:22px;}
+  .ob-flow .st{
+    flex:1;text-align:center;border:1px solid var(--line);border-radius:var(--radius);
+    padding:11px 6px;background:var(--surface-2);
+    animation:obPop .4s cubic-bezier(.2,.8,.25,1) both;
+  }
+  .ob-flow .st:nth-child(1){animation-delay:.14s} .ob-flow .st:nth-child(3){animation-delay:.24s}
+  .ob-flow .st:nth-child(5){animation-delay:.34s}
+  .ob-flow .st.on{background:var(--navy-soft);border-color:var(--navy-line);}
+  .ob-flow .st .n{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.08em;display:block;margin-bottom:3px;}
+  .ob-flow .st .t{font-size:12.5px;font-weight:800;color:var(--navy);}
+  .ob-flow .ar{color:var(--muted);font-size:13px;flex:none;}
+  @keyframes obPop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .ob-list{margin:0;padding:0;list-style:none;}
+  .ob-list li{
+    position:relative;padding-left:26px;margin-bottom:13px;font-size:13.5px;line-height:1.72;color:var(--ink-soft);
+  }
+  .ob-list li b{color:var(--ink);font-weight:800;}
+  .ob-list li .num{
+    position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;
+    background:var(--navy-soft);color:var(--navy);font-size:10.5px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ob-point{
+    background:var(--gold-soft);border:1px solid var(--gold-line);color:#6E4300;
+    border-radius:var(--radius);padding:12px 14px;font-size:13px;line-height:1.7;margin-top:4px;
+  }
+  .ob-foot{
+    padding:18px 28px 24px 28px;display:flex;align-items:center;justify-content:space-between;
+    gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:20px;
+  }
+  .ob-check{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer;font-weight:600;}
+  .ob-check input{width:15px;height:15px;accent-color:var(--navy);cursor:pointer;}
+  .ob-btn{
+    background:var(--navy);color:#fff;border:none;border-radius:var(--radius);
+    padding:12px 30px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:-.01em;
+  }
+  .ob-btn:hover{background:var(--navy-deep);}
+  .help-link{
+    background:none;border:none;color:var(--muted);font-size:12px;font-weight:700;
+    cursor:pointer;font-family:inherit;padding:0 2px 11px 2px;margin-bottom:-2.5px;
+    border-bottom:2.5px solid transparent;
+  }
+  .help-link:hover{color:var(--navy);}
+
+  /* ---------- 상태 반짝임 ---------- */
+  .badge .dot-live{
+    display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;
+    margin-right:5px;vertical-align:1px;position:relative;
+    animation:blink 1.35s ease-in-out infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.72)}}
+  @media (prefers-reduced-motion:reduce){
+    .badge .dot-live{animation:none}
+    .ob-card,.ob-backdrop,.ob-flow .st{animation:none!important}
+  }
+
+  /* ---------- 페이지네이션 ---------- */
+  .pager{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    margin-top:14px;
+  }
+  .pager-left{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);font-weight:600;}
+  .pager-nav{display:flex;align-items:center;gap:5px;}
+  .pg{
+    min-width:32px;height:32px;padding:0 9px;border:1px solid var(--line-strong);background:var(--surface);
+    border-radius:var(--radius);font-size:12.5px;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;font-family:inherit;
+  }
+  .pg:hover:not(:disabled){border-color:var(--navy);color:var(--navy);}
+  .pg.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .pg:disabled{opacity:.4;cursor:default;}
+  .pg-gap{color:var(--muted);font-size:12px;padding:0 2px;}
+
   /* ---------- Table ---------- */
   .archive-table-wrap{
     border:1px solid var(--line);border-radius:var(--radius);overflow:auto;background:var(--surface);
@@ -152,16 +266,21 @@
     border-right:1px solid rgba(255,255,255,.14);
   }
   table.archive-table thead th:last-child{border-right:none;}
-  table.archive-table thead th.sortable{cursor:pointer;user-select:none;}
+  table.archive-table thead th.sortable{cursor:pointer;user-select:none;position:relative;padding-right:22px;}
   table.archive-table thead th.sortable:hover{background:var(--navy-deep);}
-  .sort-arrow{opacity:.7;font-size:10px;margin-left:2px;}
+  table.archive-table thead th.sortable.on{background:var(--navy-deep);}
+  .sort-arrow{
+    position:absolute;right:9px;top:50%;transform:translateY(-50%);
+    font-size:9px;opacity:.4;letter-spacing:-1px;
+  }
+  th.sortable.on .sort-arrow{opacity:1;}
   table.archive-table td{
     padding:8px 12px;border-bottom:1px solid var(--line);color:var(--ink);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:top;
   }
   table.archive-table tbody tr:last-child td{border-bottom:none;}
   table.archive-table td.cell-wide{white-space:normal;}
-  table.archive-table th.col-date, table.archive-table td.col-date{white-space:nowrap;width:104px;}
+  table.archive-table th.col-date, table.archive-table td.col-date{white-space:nowrap;width:122px;}
   table.archive-table th.col-kind, table.archive-table td.col-kind{width:112px;}
   table.archive-table th.col-qtr, table.archive-table td.col-qtr{width:142px;white-space:nowrap;}
   table.archive-table th.col-product, table.archive-table td.col-product{min-width:230px;max-width:330px;white-space:normal;}
@@ -388,6 +507,17 @@
   .hidden{display:none!important;}
 
   @media (max-width:640px){
+    .ob-backdrop{padding:12px;align-items:flex-start;padding-top:22px;}
+    .ob-head{padding:20px 20px 18px 20px;}
+    .ob-head h2{font-size:18px;}
+    .ob-body{padding:20px 20px 4px 20px;}
+    .ob-flow{gap:4px;margin-bottom:18px;}
+    .ob-flow .st{padding:9px 3px;}
+    .ob-flow .st .t{font-size:11.5px;}
+    .ob-list li{font-size:13px;margin-bottom:11px;}
+    .ob-foot{padding:16px 20px 20px 20px;flex-direction:column-reverse;align-items:stretch;gap:12px;margin-top:16px;}
+    .ob-btn{width:100%;padding:14px;}
+    .ob-check{justify-content:center;}
     header.top{padding:16px 16px 0 16px;}
     main{padding:16px 16px 110px 16px;}
     .brand h1{font-size:18px;}
@@ -416,8 +546,12 @@
       <button class="new-btn" onclick="goToForm()">새 요청서 작성</button>
     </div>
     <div class="tabs" id="browseTabs">
-      <button class="tab-btn active" data-tab="progress" onclick="switchTab('progress')">진행현황</button>
-      <button class="tab-btn" data-tab="archive" onclick="switchTab('archive')">아카이브</button>
+      <button class="tab-btn active tip" data-tab="progress" onclick="switchTab('progress')"
+        data-tip="접수된 요청서가 지금 어느 단계까지 왔는지 확인합니다.&#10;접수 → 검토 → 채택 여부까지 볼 수 있습니다.">진행현황</button>
+      <button class="tab-btn tip" data-tab="archive" onclick="switchTab('archive')"
+        data-tip="지금까지 실제로 진행된 세미나 기록입니다.&#10;주제·강사·참석률을 참고해 요청서를 쓰실 때 도움이 됩니다.">진행완료 세미나</button>
+      <button class="help-link tip" onclick="openOnboarding(true)"
+        data-tip="이 서비스를 왜 운영하는지 다시 확인합니다.">이용 안내</button>
     </div>
 
     <div class="back-row hidden" id="formHeaderRow">
@@ -564,12 +698,21 @@ let state = {
   tab: "progress",       // progress | archive
   archiveFilter: "general", // general | woahan
   searchQuery: "",
-  sortMode: "submitted_desc", // submitted_desc | submitted_asc | qtr
+  archiveSortKey: 'date',
+  archiveSortDir: 'desc',
+  archivePage: 1,
+  archivePageSize: 10,
   needs: [],
   connection: 'loading',   // loading | live | local | error
   loadError: '',
   refreshing: false,
   lastLoaded: null,
+  page: 1,
+  pageSize: 10,
+  sortKey: 'submitted',
+  sortDir: 'desc',
+  groupByQtr: false,
+  onboardOpen: false,
   searchField: 'all',      // all | id | owner | dept | product | kind | target | text
   filterStatus: 'all',
   filterQtr: 'all',
@@ -607,7 +750,12 @@ function hasContent(f){
    Apps Script 배포 후 나오는 웹앱 URL을 아래에 붙여넣으면
    실제 구글시트와 연동되어 동작합니다. 비워두면 브라우저 로컬 저장(테스트용)으로 동작합니다.
    ========================================================= */
-const API_URL = "https://script.google.com/macros/s/AKfycbyfYLjVZnaHJld8TjSukzirSI5J9rKWuG2FuzV3jMqI_2WOmYKmgdMQXJevBNsSVSFT/exec"; // 예: "https://script.google.com/macros/s/AKfycb.../exec"
+/* ★★★ 여기만 바꾸시면 됩니다 ★★★
+   Apps Script → 배포 → 배포 관리 → "웹 앱" URL 을 복사해 아래 따옴표 안에 붙여넣으세요.
+   비워두면("") 구글시트 없이 로컬 데모 모드로 동작합니다.
+   주의: "새 배포"를 누르면 URL이 새로 생성되므로 아래 값도 함께 바꿔야 합니다.
+        URL을 유지하려면 "배포 관리 → 수정(연필) → 버전: 새 버전 → 배포"를 사용하세요. */
+const API_URL = "https://script.google.com/macros/s/AKfycbyfYLjVZnaHJld8TjSukzirSI5J9rKWuG2FuzV3jMqI_2WOmYKmgdMQXJevBNsSVSFT/exec";
 
 /* 브라우저 저장소 안전 래퍼 (구글시트 미연동 시에만 사용) */
 const localStore = {
@@ -623,6 +771,7 @@ async function loadStoredNeeds(isRefresh){
     }
     try{
       const res = await fetch(API_URL, {method:'GET'});
+      if(res.status === 404) throw new Error('NOTFOUND');
       if(!res.ok) throw new Error('HTTP ' + res.status);
       const text = await res.text();
       let data;
@@ -640,7 +789,7 @@ async function loadStoredNeeds(isRefresh){
       state.connection = 'live';
       state.loadError = '';
       state.lastLoaded = new Date();
-      render();
+      renderSafely();
       return;
     }catch(e){
       // 연동 실패 시 목업 데이터를 실데이터처럼 보여주지 않고 오류 상태로 명확히 표시
@@ -664,6 +813,12 @@ async function loadStoredNeeds(isRefresh){
   render();
 }
 
+/* 화면 그리기 중 오류가 나도 '시트 연동 실패'로 잘못 표시되지 않게 분리합니다 */
+function renderSafely(){
+  try{ render(); }
+  catch(e){ console.error('화면 렌더링 오류:', e); }
+}
+
 function retryLoad(){ loadStoredNeeds(); }
 
 /* 구글시트 데이터를 원하는 시점에 다시 불러오기 (검색·필터 조건은 유지) */
@@ -678,6 +833,122 @@ async function refreshNeeds(){
     state.refreshing = false;
     renderOnly();
   }
+}
+
+/* ---------- 날짜 표기 ----------
+   구글시트 셀 서식에 따라 날짜가 여러 형태로 들어옵니다.
+   - "2026-08-23 14:30"        (텍스트 서식)
+   - "2026-08-23T05:30:00.000Z" (날짜 서식 → JSON 변환)
+   - "Sun Aug 23 2026 02:05:00 GMT+0900 (한국 표준시)" (텍스트 셀에 날짜 객체가 들어간 경우)
+   어떤 형태로 와도 "2026년 8월 23일"로 통일해 보여줍니다. */
+function fromDateObj(d){
+  return {y:d.getFullYear(), mo:d.getMonth()+1, d:d.getDate(), h:d.getHours(), mi:d.getMinutes()};
+}
+const MONTH_EN = {Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
+function parseDate(v){
+  if(v instanceof Date && !isNaN(v.getTime())) return fromDateObj(v);
+  const t = str(v).trim();
+  if(!t) return null;
+
+  // 1) "Sun Aug 23 2026 02:05:00 GMT+0900" — 이미 현지 시각이 적혀 있으므로 글자 그대로 읽습니다
+  //    (Date로 다시 해석하면 보는 사람의 시간대에 따라 날짜가 하루 밀릴 수 있습니다)
+  const en = t.match(/^[A-Za-z]{3}\s+([A-Za-z]{3})\s+(\d{1,2})\s+(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/);
+  if(en && MONTH_EN[en[1]]){
+    return {y:+en[3], mo:MONTH_EN[en[1]], d:+en[2],
+            h:en[4]!==undefined?+en[4]:null, mi:en[5]!==undefined?+en[5]:null};
+  }
+
+  // 2) 시간대가 명시된 ISO 형식 (…Z, …+09:00) — 한국 시각으로 변환해 보여줍니다
+  if(/^\d{4}-\d{2}-\d{2}T/.test(t) && /(Z|[+-]\d{2}:?\d{2})$/.test(t)){
+    const d = new Date(t);
+    if(!isNaN(d.getTime())) return fromDateObj(d);
+  }
+
+  // 3) yyyy-mm-dd / yyyy.mm.dd / yyyy/mm/dd (+ 시:분) — 적힌 그대로
+  const m = t.match(/^(\d{4})[-.\/](\d{1,2})[-.\/](\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/);
+  if(m) return {y:+m[1], mo:+m[2], d:+m[3], h:m[4]!==undefined?+m[4]:null, mi:m[5]!==undefined?+m[5]:null};
+
+  // 4) 그 밖의 형태는 브라우저 해석에 맡깁니다
+  const d = new Date(t);
+  if(!isNaN(d.getTime())) return fromDateObj(d);
+  return null;
+}
+/* 정렬·비교용 숫자값 (형식이 섞여 있어도 올바른 순서로 정렬됩니다) */
+function dateVal(v){
+  const p = parseDate(v);
+  if(!p) return 0;
+  return ((p.y*100 + p.mo)*100 + p.d)*10000 + (p.h||0)*100 + (p.mi||0);
+}
+/* 목록용 — 2026년 8월 23일 */
+function dateKo(v){
+  const p = parseDate(v);
+  if(!p) return str(v);
+  return `${p.y}년 ${p.mo}월 ${p.d}일`;
+}
+/* 상세용 — 2026년 8월 23일 오전 2시 5분 */
+function dateTimeKo(v){
+  const p = parseDate(v);
+  if(!p) return str(v);
+  let out = `${p.y}년 ${p.mo}월 ${p.d}일`;
+  if(p.h !== null){
+    const ampm = p.h < 12 ? '오전' : '오후';
+    const h12 = p.h % 12 === 0 ? 12 : p.h % 12;
+    out += ` ${ampm} ${h12}시${p.mi ? ` ${p.mi}분` : ''}`;
+  }
+  return out;
+}
+
+/* ---------- 페이지 이동 ---------- */
+function setPageSize(v){ state.pageSize = parseInt(v,10) || 10; state.page = 1; renderOnly(); }
+function goPage(n){
+  state.page = n;
+  renderOnly();
+  const wrap = document.getElementById('progressListWrap');
+  if(wrap) wrap.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function setArchivePageSize(v){ state.archivePageSize = parseInt(v,10) || 10; state.archivePage = 1; render(); }
+function goArchivePage(n){ state.archivePage = n; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+
+function renderPager(totalItems, opts){
+  const o = opts || {};
+  const size = o.size || state.pageSize;
+  const cur0 = o.cur || state.page;
+  const sizeFn = o.sizeFn || 'setPageSize';
+  const goFn = o.goFn || 'goPage';
+  const pages = Math.max(1, Math.ceil(totalItems / size));
+  const cur = Math.min(cur0, pages);
+  const from = totalItems === 0 ? 0 : (cur-1)*size + 1;
+  const to = Math.min(cur*size, totalItems);
+
+  // 현재 페이지 주변만 노출하고 나머지는 생략 부호로 접습니다
+  const nums = [];
+  const push = n => { if(!nums.includes(n)) nums.push(n); };
+  push(1);
+  for(let i = cur-1; i <= cur+1; i++){ if(i > 1 && i < pages) push(i); }
+  if(pages > 1) push(pages);
+  nums.sort((a,b)=>a-b);
+
+  let btns = '';
+  let prev = 0;
+  nums.forEach(n => {
+    if(prev && n - prev > 1) btns += `<span class="pg-gap">···</span>`;
+    btns += `<button type="button" class="pg ${n===cur?'on':''}" onclick="${goFn}(${n})">${n}</button>`;
+    prev = n;
+  });
+
+  return `<div class="pager">
+    <div class="pager-left">
+      <span>${totalItems}건 중 <b style="color:var(--navy)">${from}–${to}</b></span>
+      <select class="ctrl" onchange="${sizeFn}(this.value)" aria-label="한 페이지에 보여줄 건수" style="padding:6px 9px;">
+        ${[5,10,20].map(v=>`<option value="${v}" ${size===v?'selected':''}>${v}개씩 보기</option>`).join('')}
+      </select>
+    </div>
+    <div class="pager-nav">
+      <button type="button" class="pg" onclick="${goFn}(${cur-1})" ${cur<=1?'disabled':''} aria-label="이전 페이지">‹</button>
+      ${btns}
+      <button type="button" class="pg" onclick="${goFn}(${cur+1})" ${cur>=pages?'disabled':''} aria-label="다음 페이지">›</button>
+    </div>
+  </div>`;
 }
 
 function stampText(){
@@ -735,32 +1006,68 @@ function switchTab(tab){
 }
 function switchArchiveFilter(f){
   state.archiveFilter = f;
+  state.archivePage = 1;
   render();
 }
+/* 목록 정렬 정의 — 컬럼 헤더 클릭 시 사용 */
+const STATUS_ORDER = ['접수완료','검토중','수락(채택)','차기 검토','완료'];
+const SORT_COLS = {
+  submitted: {label:'제출일',     val:n => dateVal(n.submitted)},
+  status:    {label:'상태',       val:n => { const i = STATUS_ORDER.indexOf(str(n.status)); return i === -1 ? 99 : i; }},
+  qtr:       {label:'희망 시기',  val:n => { const i = QUARTERS_ALL.indexOf(str(n.qtr));   return i === -1 ? 999 : i; }},
+  kind:      {label:'세미나종류', val:n => str(n.kind)},
+  product:   {label:'제품·서비스', val:n => str(n.productName) + ' ' + str(n.productDetail)},
+  target:    {label:'목표고객',   val:n => str(n.target)},
+  id:        {label:'접수번호',   val:n => str(n.id)}
+};
+
+/* 같은 컬럼을 다시 누르면 오름/내림이 뒤바뀝니다 */
+function sortBy(key){
+  if(state.sortKey === key){
+    state.sortDir = (state.sortDir === 'asc') ? 'desc' : 'asc';
+  } else {
+    state.sortKey = key;
+    // 날짜는 최신순, 나머지는 오름차순으로 시작하는 편이 자연스럽습니다
+    state.sortDir = (key === 'submitted') ? 'desc' : 'asc';
+  }
+  if(key !== 'qtr') state.groupByQtr = false;
+  state.page = 1;
+  renderOnly();
+}
+function arrowFor(key){
+  if(state.sortKey !== key) return '<span class="sort-arrow">▲▼</span>';
+  return `<span class="sort-arrow">${state.sortDir === 'asc' ? '▲' : '▼'}</span>`;
+}
+function thSort(key, extraClass){
+  const on = state.sortKey === key;
+  return `<th class="${extraClass||''} sortable ${on?'on':''}" onclick="sortBy('${key}')"
+    title="클릭하면 ${SORT_COLS[key].label} 기준으로 정렬됩니다">${SORT_COLS[key].label}${arrowFor(key)}</th>`;
+}
+
 function toggleSubmittedSort(){
-  state.sortMode = (state.sortMode === 'submitted_desc') ? 'submitted_asc' : 'submitted_desc';
+  sortBy('submitted');
   renderOnly();
 }
 function toggleQtrGrouping(){
-  state.sortMode = (state.sortMode === 'qtr') ? 'submitted_desc' : 'qtr';
+  state.groupByQtr = !state.groupByQtr;
+  if(state.groupByQtr){ state.sortKey = 'qtr'; state.sortDir = 'asc'; }
+  else { state.sortKey = 'submitted'; state.sortDir = 'desc'; }
+  state.page = 1;
   renderOnly();
 }
 function sortNeeds(list){
-  const sorted = list.slice();
-  const sub = n => str(n.submitted);
-  if(state.sortMode === "submitted_desc"){
-    sorted.sort((a,b) => sub(b).localeCompare(sub(a)));
-  } else if(state.sortMode === "submitted_asc"){
-    sorted.sort((a,b) => sub(a).localeCompare(sub(b)));
-  } else if(state.sortMode === "qtr"){
-    sorted.sort((a,b) => {
-      let qa = QUARTERS_ALL.indexOf(str(a.qtr)), qb = QUARTERS_ALL.indexOf(str(b.qtr));
-      if(qa === -1) qa = 999; if(qb === -1) qb = 999;
-      if(qa !== qb) return qa - qb;
-      return sub(a).localeCompare(sub(b));
-    });
-  }
-  return sorted;
+  const def = SORT_COLS[state.sortKey] || SORT_COLS.submitted;
+  const dir = state.sortDir === 'asc' ? 1 : -1;
+  const cmp = (x, y) => {
+    if(typeof x === 'number' && typeof y === 'number') return x - y;
+    return String(x).localeCompare(String(y), 'ko');
+  };
+  return list.slice().sort((a, b) => {
+    const r = cmp(def.val(a), def.val(b));
+    if(r !== 0) return r * dir;
+    // 값이 같으면 항상 최신 제출 건이 위로
+    return dateVal(b.submitted) - dateVal(a.submitted);
+  });
 }
 
 /* =========================================================
@@ -807,7 +1114,9 @@ function badgeFor(status){
     "접수완료":"gray", "검토중":"blue", "수락(채택)":"green", "차기 검토":"amber", "완료":"navy"
   };
   const st = str(status) || '접수완료';
-  return `<span class="badge ${map[st]||'gray'}">${escapeHtml(st)}</span>`;
+  // 지금 실제로 검토가 진행 중인 건은 눈에 띄도록 표시합니다
+  const live = (st === '검토중') ? '<span class="dot-live"></span>' : '';
+  return `<span class="badge ${map[st]||'gray'}">${live}${escapeHtml(st)}</span>`;
 }
 
 /* =========================================================
@@ -836,26 +1145,25 @@ function renderProgressList(){
       if(ia === -1) ia = 999; if(ib === -1) ib = 999;
       return ia - ib;
     });
-  const dateArrow = state.sortMode === 'submitted_asc' ? '▲' : (state.sortMode === 'submitted_desc' ? '▼' : '↕');
 
   const connMap = {
-    loading: {cls:'', txt:'구글시트에서 불러오는 중입니다'},
-    live:    {cls:'live', txt:'구글시트 연동 — 실시간 반영'},
-    local:   {cls:'local', txt:'로컬 데모 모드 — 구글시트 미연동, 이 브라우저에만 저장됩니다'},
+    loading: {cls:'', txt:'목록을 불러오는 중입니다'},
+    live:    {cls:'live', txt:'구글시트에 연결되어 있습니다'},
+    local:   {cls:'local', txt:'연습 모드입니다 — 시트에 저장되지 않고 이 브라우저에만 남습니다'},
     error:   {cls:'', txt:''}
   };
   const conn = connMap[state.connection] || connMap.loading;
 
   const fieldDef = SEARCH_FIELDS.find(f => f.key === state.searchField) || SEARCH_FIELDS[0];
   const placeholders = {
-    all:'접수번호, 작성자, 제품명, 내용 등 무엇이든 입력해보세요',
+    all:'접수번호, 작성자, 제품명, 내용 등 무엇이든 적어보세요',
     id:'접수번호 (예: N-2026-003)',
     owner:'작성자 이름 (예: 김민수)',
     dept:'요청부서 (예: 채널마케팅본부)',
     product:'제품·서비스명 (예: Reading Town)',
     kind:'세미나종류 (예: 혼강세미나)',
     target:'목표고객 (예: 초등, 학원장)',
-    text:'요청사유·기대효과 본문 검색'
+    text:'요청 사유나 기대효과에 적힌 내용으로 찾기'
   };
 
   let html = `
@@ -873,10 +1181,11 @@ function renderProgressList(){
           ${STATUS_OPTIONS.map(o => `<option value="${escapeAttr(o)}" ${state.filterStatus===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}
         </select>
         <select class="ctrl ${state.filterQtr!=='all'?'on':''}" onchange="setQtrFilter(this.value)" aria-label="기수 필터">
-          <option value="all">기수 전체</option>
+          <option value="all">시기 전체</option>
           ${qtrsInUse.map(o => `<option value="${escapeAttr(o)}" ${state.filterQtr===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}
         </select>
-        <button type="button" class="pill ${state.sortMode==='qtr'?'active':''}" onclick="toggleQtrGrouping()">기수별로 묶어보기</button>
+        <button type="button" class="pill tip ${state.groupByQtr?'active':''}" onclick="toggleQtrGrouping()"
+          data-tip="같은 시기에 접수된 요청서끼리 묶어서 보여줍니다.">시기별로 묶어보기</button>
         ${hasActiveFilter() ? `<button type="button" class="pill ghost" onclick="clearFilters()">검색·필터 초기화</button>` : ''}
         <button type="button" class="refresh-btn ${state.refreshing?'spin':''}" id="refreshBtn" onclick="refreshNeeds()" ${state.refreshing?'disabled':''}>
           <span class="ico"></span><span class="txt">${state.refreshing ? '불러오는 중' : '새로고침'}</span>
@@ -885,19 +1194,29 @@ function renderProgressList(){
     </div>`;
 
   if(state.connection === 'error'){
-    const isAuth = state.loadError === 'AUTH';
+    const cause = state.loadError;
+    let guide;
+    if(cause === 'NOTFOUND'){
+      guide = `연결된 <b>Apps Script 배포를 찾을 수 없습니다.</b> URL이 바뀌었거나 배포가 삭제된 상태입니다.
+         <span style="display:block;margin-top:6px;opacity:.9;font-size:12px;line-height:1.7;">
+         1. 구글시트 → 확장 프로그램 → Apps Script<br>
+         2. 배포 → <b>배포 관리</b>에서 현재 살아 있는 "웹 앱" URL 확인<br>
+         3. 그 URL을 index.html 상단의 <b>API_URL</b>에 붙여넣고 다시 배포<br>
+         <br>참고: <b>"새 배포"</b>를 누르면 URL이 새로 생깁니다. URL을 유지하려면
+         <b>"배포 관리 → 수정 → 버전: 새 버전 → 배포"</b>를 사용하세요.</span>`;
+    } else if(cause === 'AUTH'){
+      guide = `Apps Script 웹앱의 <b>액세스 권한이 "모든 사용자"가 아닙니다.</b> 아래 순서로 조치해주세요.
+         <span style="display:block;margin-top:6px;opacity:.9;font-size:12px;line-height:1.7;">
+         1. 구글시트 → 확장 프로그램 → Apps Script<br>
+         2. 배포 → 배포 관리 → 연필(수정)<br>
+         3. 액세스 권한을 <b>"모든 사용자"</b>로 변경<br>
+         4. 버전 <b>"새 버전"</b> 선택 후 배포</span>`;
+    } else {
+      guide = `네트워크 상태를 확인하신 뒤 다시 시도해주세요.
+         <span style="display:block;margin-top:4px;opacity:.75;font-size:11.5px;">사유: ${escapeHtml(cause)}</span>`;
+    }
     html += `<div class="notice err">
-        <span><b>구글시트에서 목록을 불러오지 못했습니다.</b><br>${
-          isAuth
-          ? `Apps Script 웹앱의 <b>액세스 권한이 "모든 사용자"가 아닙니다.</b> 아래 순서로 조치해주세요.
-             <span style="display:block;margin-top:6px;opacity:.9;font-size:12px;line-height:1.7;">
-             1. 구글시트 → 확장 프로그램 → Apps Script<br>
-             2. 배포 → 배포 관리 → 연필(수정)<br>
-             3. 액세스 권한을 <b>"모든 사용자"</b>로 변경<br>
-             4. 버전 <b>"새 버전"</b> 선택 후 배포</span>`
-          : `네트워크 상태를 확인하신 뒤 다시 시도해주세요.
-             <span style="display:block;margin-top:4px;opacity:.75;font-size:11.5px;">사유: ${escapeHtml(state.loadError)}</span>`
-        }</span>
+        <span><b>구글시트에서 목록을 불러오지 못했습니다.</b><br>${guide}</span>
         <span class="n-act"><button type="button" onclick="retryLoad()">다시 불러오기</button></span>
       </div>`;
   } else {
@@ -909,6 +1228,11 @@ function renderProgressList(){
         <span class="conn ${conn.cls}" style="margin:0;"><span class="led"></span>${conn.txt}${state.lastLoaded ? ` · ${stampText()}` : ''}</span>
       </div>`;
   }
+
+  // 현재 페이지 구간만 잘라 그립니다
+  const pageCount = Math.max(1, Math.ceil(list.length / state.pageSize));
+  if(state.page > pageCount) state.page = pageCount;
+  const pageItems = list.slice((state.page-1)*state.pageSize, state.page*state.pageSize);
 
   if(list.length === 0){
     if(state.connection === 'error') return html;
@@ -925,20 +1249,25 @@ function renderProgressList(){
   }
 
   html += `<div class="archive-table-wrap"><table class="archive-table"><thead><tr>
-    <th class="col-date sortable" onclick="toggleSubmittedSort()">제출일 <span class="sort-arrow">${dateArrow}</span></th><th>상태</th><th class="col-qtr">대상기수</th>
-    <th class="col-kind">세미나종류</th><th class="col-product">제품·서비스</th><th>목표고객</th>
-    <th class="col-reason">요청 사유(배경)</th><th class="col-reason">기대효과</th><th>접수번호</th>
+    ${thSort('submitted','col-date')}
+    ${thSort('status')}
+    ${thSort('qtr','col-qtr')}
+    ${thSort('kind','col-kind')}
+    ${thSort('product','col-product')}
+    ${thSort('target')}
+    <th class="col-reason">요청 사유</th><th class="col-reason">기대효과</th>
+    ${thSort('id')}
   </tr></thead><tbody>`;
 
   let lastGroup = null;
-  list.forEach(n=>{
-    if(state.sortMode === 'qtr' && n.qtr !== lastGroup){
+  pageItems.forEach(n=>{
+    if(state.groupByQtr && n.qtr !== lastGroup){
       lastGroup = n.qtr;
       html += `<tr><td colspan="9" class="table-group-row">${escapeHtml(n.qtr)}</td></tr>`;
     }
     const isNew = state.highlightId && n.id === state.highlightId;
     html += `<tr class="${isNew ? 'row-highlight' : ''}" onclick="openDetail('${escapeAttr(n.id)}')">`;
-    html += `<td class="mono col-date">${escapeHtml(str(n.submitted).slice(0,10))}${isNew ? ' <span class="new-flag-inline">NEW</span>' : ''}</td>`;
+    html += `<td class="col-date">${escapeHtml(dateKo(n.submitted))}${isNew ? ' <span class="new-flag-inline">NEW</span>' : ''}</td>`;
     html += `<td>${badgeFor(n.status)}</td>`;
     html += `<td class="col-qtr">${hl(n.qtr, q)}</td>`;
     html += `<td class="col-kind"><span class="kind-chip">${hl(n.kind, q)}</span></td>`;
@@ -951,54 +1280,111 @@ function renderProgressList(){
   });
 
   html += `</tbody></table></div>`;
+  html += renderPager(list.length);
   return html;
 }
 
 /* =========================================================
    RENDER: BROWSE - ARCHIVE TAB
    ========================================================= */
+/* 진행완료 세미나 정렬 기준 */
+const ARCHIVE_SORT = {
+  date:       {label:'날짜',       val:a => dateVal(a.date)},
+  kind:       {label:'종류',       val:a => str(a.kind)},
+  product:    {label:'교재·서비스', val:a => str(a.product)},
+  name:       {label:'세미나명',   val:a => str(a.name)},
+  applied:    {label:'신청',       val:a => Number(a.applied) || 0},
+  attended:   {label:'참석',       val:a => Number(a.attended) || 0},
+  rate:       {label:'참석률',     val:a => a.applied ? (a.attended/a.applied) : -1},
+  instructor: {label:'강사·학원',  val:a => str(a.instructor)}
+};
+function archiveSortBy(key){
+  if(state.archiveSortKey === key){
+    state.archiveSortDir = (state.archiveSortDir === 'asc') ? 'desc' : 'asc';
+  } else {
+    state.archiveSortKey = key;
+    state.archiveSortDir = (key === 'date' || key === 'applied' || key === 'attended' || key === 'rate') ? 'desc' : 'asc';
+  }
+  render();
+}
+function aTh(key, cls){
+  const on = state.archiveSortKey === key;
+  const arrow = on ? (state.archiveSortDir === 'asc' ? '▲' : '▼') : '▲▼';
+  return `<th class="${cls||''} sortable ${on?'on':''}" onclick="archiveSortBy('${key}')"
+    title="클릭하면 ${ARCHIVE_SORT[key].label} 기준으로 정렬됩니다">${ARCHIVE_SORT[key].label}<span class="sort-arrow">${arrow}</span></th>`;
+}
+function sortArchive(list){
+  const def = ARCHIVE_SORT[state.archiveSortKey] || ARCHIVE_SORT.date;
+  const dir = state.archiveSortDir === 'asc' ? 1 : -1;
+  return list.map((a,i)=>({a,i})).sort((x,y)=>{
+    const vx = def.val(x.a), vy = def.val(y.a);
+    let r;
+    if(typeof vx === 'number' && typeof vy === 'number') r = vx - vy;
+    else r = String(vx).localeCompare(String(vy), 'ko');
+    if(r !== 0) return r * dir;
+    return dateVal(y.a.date) - dateVal(x.a.date);
+  });
+}
+
 function renderArchiveList(){
-  const data = state.archiveFilter === "general" ? archiveGeneral : archiveWoahan;
+  const isGeneral = state.archiveFilter === "general";
+  const data = isGeneral ? archiveGeneral : archiveWoahan;
   let html = `
+    <div class="notice">
+      <span><b>지금까지 진행된 세미나 기록입니다.</b> 어떤 주제가 어떤 반응을 얻었는지 참고하시면 요청서를 쓰실 때 도움이 됩니다. 행을 누르면 자세히 볼 수 있습니다.</span>
+    </div>
     <div class="filter-pills">
-      <button type="button" class="pill ${state.archiveFilter==='general'?'active':''}" onclick="switchArchiveFilter('general')">일반세미나 ${archiveGeneral.length}건</button>
-      <button type="button" class="pill ${state.archiveFilter==='woahan'?'active':''}" onclick="switchArchiveFilter('woahan')">우아한세미나(종료) ${archiveWoahan.length}건</button>
+      <button type="button" class="pill tip ${isGeneral?'active':''}" onclick="switchArchiveFilter('general')"
+        data-tip="현재도 계속 진행 중인 정규 세미나입니다.">일반세미나 ${archiveGeneral.length}건</button>
+      <button type="button" class="pill tip ${!isGeneral?'active':''}" onclick="switchArchiveFilter('woahan')"
+        data-tip="지금은 진행하지 않는 지난 시리즈입니다.">우아한세미나(운영 종료) ${archiveWoahan.length}건</button>
     </div>
   `;
-  if(state.archiveFilter === 'woahan'){
-    html += `<div class="notice"><span>종료된 시리즈입니다. 신규 진행 없이 <b>열람 전용</b>으로 보존됩니다.</span></div>`;
+  if(!isGeneral){
+    html += `<div class="notice warn"><span>운영이 종료된 시리즈입니다. 새로 진행하지 않으며 <b>기록 열람용</b>으로만 보관합니다.</span></div>`;
   }
+  html += `<div class="result-line"><span><b>${data.length}건</b> · 표 머리글을 누르면 정렬됩니다</span></div>`;
 
   html += `<div class="archive-table-wrap"><table class="archive-table"><thead><tr>`;
-  if(state.archiveFilter === 'general'){
-    html += `<th class="col-date">날짜</th><th class="col-kind">종류</th><th class="col-product">교재·서비스</th><th class="col-title">세미나명</th><th>신청</th><th>참석</th><th>참석률</th><th>강사·학원</th><th>영상</th><th>메모</th><th>출처</th>`;
+  if(isGeneral){
+    html += aTh('date','col-date') + aTh('kind','col-kind') + aTh('product','col-product') + aTh('name','col-title')
+          + aTh('applied') + aTh('attended') + aTh('rate') + aTh('instructor')
+          + `<th>영상</th><th>메모</th><th>출처</th>`;
   } else {
-    html += `<th class="col-date">날짜</th><th class="col-kind">종류</th><th class="col-title">세미나명</th><th>강사·학원</th><th>영상</th><th>메모</th>`;
+    html += aTh('date','col-date') + aTh('kind','col-kind') + aTh('name','col-title') + aTh('instructor')
+          + `<th>영상</th><th>메모</th>`;
   }
   html += `</tr></thead><tbody>`;
 
-  data.forEach((a, idx)=>{
+  const aPages = Math.max(1, Math.ceil(data.length / state.archivePageSize));
+  if(state.archivePage > aPages) state.archivePage = aPages;
+  const aStart = (state.archivePage - 1) * state.archivePageSize;
+  sortArchive(data).slice(aStart, aStart + state.archivePageSize).forEach(({a, i: idx})=>{
     const rate = (a.applied ? Math.round((a.attended/a.applied)*1000)/10 : null);
     html += `<tr onclick="openArchiveDetail('${state.archiveFilter}', ${idx})">`;
-    html += `<td class="mono col-date">${escapeHtml(a.date)}</td>`;
+    html += `<td class="col-date">${escapeHtml(dateKo(a.date))}</td>`;
     html += `<td class="col-kind"><span class="kind-chip">${escapeHtml(a.kind)}</span></td>`;
-    if(state.archiveFilter === 'general'){
+    if(isGeneral){
       html += `<td class="col-product">${escapeHtml(a.product)}</td>`;
     }
     html += `<td class="cell-wide col-title" title="${escapeAttr(a.name)}">${escapeHtml(a.name)}</td>`;
-    if(state.archiveFilter === 'general'){
+    if(isGeneral){
       html += `<td>${a.applied ?? ''}</td><td>${a.attended ?? ''}</td><td>${rate!==null ? rate+'%' : ''}</td>`;
     }
     html += `<td>${escapeHtml(a.instructor)}</td>`;
     html += `<td class="cell-link" title="${escapeAttr(a.video)}">${a.video ? '링크' : ''}</td>`;
     html += `<td class="cell-wide">${escapeHtml(a.memo)}</td>`;
-    if(state.archiveFilter === 'general'){
+    if(isGeneral){
       html += `<td>${escapeHtml(a.source)}</td>`;
     }
     html += `</tr>`;
   });
 
   html += `</tbody></table></div>`;
+  html += renderPager(data.length, {
+    size: state.archivePageSize, cur: state.archivePage,
+    sizeFn: 'setArchivePageSize', goFn: 'goArchivePage'
+  });
   return html;
 }
 
@@ -1017,12 +1403,12 @@ function openDetail(id){
       <div class="sheet-code mono">${escapeHtml(n.id)} · ${escapeHtml(n.productType)}</div>
       ${renderStepper(n.status)}
       <div class="sheet-section">
-        <div class="kv"><div class="k">대상기수</div><div class="v">${escapeHtml(n.qtr)}</div></div>
+        <div class="kv"><div class="k">희망 시기</div><div class="v">${escapeHtml(n.qtr)}</div></div>
         <div class="kv"><div class="k">세미나종류</div><div class="v">${escapeHtml(n.kind)}</div></div>
         <div class="kv"><div class="k">목표고객</div><div class="v">${escapeHtml(n.target)}</div></div>
-        <div class="kv"><div class="k">요청사유</div><div class="v">${escapeHtml(n.background)}</div></div>
+        <div class="kv"><div class="k">요청 사유</div><div class="v">${escapeHtml(n.background)}</div></div>
         <div class="kv"><div class="k">기대효과</div><div class="v">${escapeHtml(n.effect)}</div></div>
-        <div class="kv"><div class="k">제출일시</div><div class="v">${escapeHtml(n.submitted)}</div></div>
+        <div class="kv"><div class="k">제출일시</div><div class="v">${escapeHtml(dateTimeKo(n.submitted))}</div></div>
       </div>
       ${n.ref ? `<div class="sheet-section"><div class="k" style="font-size:13px;font-weight:800;margin-bottom:8px;">참고자료</div><div class="link-box">${escapeHtml(n.ref)}</div></div>` : ''}
       ${n.holdReason ? `<div class="reason-box"><strong>차기 검토 사유</strong><br>${escapeHtml(n.holdReason)}</div>` : ''}
@@ -1040,7 +1426,7 @@ function openArchiveDetail(filter, idx){
       <button class="sheet-close" onclick="closeSheet()">✕</button>
       <div class="sheet-handle"></div>
       <h2>${escapeHtml(a.name)}</h2>
-      <div class="sheet-code mono">${escapeHtml(a.date)} · ${escapeHtml(a.kind)}</div>
+      <div class="sheet-code">${escapeHtml(dateKo(a.date))} · ${escapeHtml(a.kind)}</div>
       <div class="sheet-section">
         <div class="kv"><div class="k">강사·학원</div><div class="v">${escapeHtml(a.instructor)}</div></div>
         ${a.product ? `<div class="kv"><div class="k">교재·서비스</div><div class="v">${escapeHtml(a.product)}</div></div>` : ''}
@@ -1052,6 +1438,75 @@ function openArchiveDetail(filter, idx){
   </div>`;
   openSheetLayer(html);
 }
+/* =========================================================
+   이용 안내 팝업 — 왜 이 요청서를 받는지 먼저 알려드립니다
+   ========================================================= */
+const OB_SESSION_KEY = 'seminar-onboard-shown';
+const OB_HIDE_KEY = 'seminar-onboard-hide';
+
+function shouldShowOnboarding(){
+  try{
+    if(localStorage.getItem(OB_HIDE_KEY) === '1') return false;      // 다시 보지 않기 선택
+    if(sessionStorage.getItem(OB_SESSION_KEY) === '1') return false; // 이번 방문에 이미 봄
+  }catch(e){}
+  return true;
+}
+
+function openOnboarding(force){
+  if(!force && !shouldShowOnboarding()) return;
+  state.onboardOpen = true;
+  try{ sessionStorage.setItem(OB_SESSION_KEY, '1'); }catch(e){}
+  const layer = document.getElementById('onboardLayer');
+  layer.innerHTML = `
+  <div class="ob-backdrop" id="obBackdrop" onclick="if(event.target===this) closeOnboarding()" role="dialog" aria-modal="true" aria-labelledby="obTitle">
+    <div class="ob-card">
+      <div class="ob-head">
+        <div class="eyebrow">NE능률 디지털마케팅팀</div>
+        <h2 id="obTitle">세미나 주제는<br>여러분의 요청에서 시작합니다</h2>
+      </div>
+      <div class="ob-body">
+        <div class="ob-flow">
+          <div class="st on"><span class="n">STEP 1</span><span class="t">요청서 작성</span></div>
+          <span class="ar">›</span>
+          <div class="st"><span class="n">STEP 2</span><span class="t">분기 검토</span></div>
+          <span class="ar">›</span>
+          <div class="st"><span class="n">STEP 3</span><span class="t">세미나 진행</span></div>
+        </div>
+
+        <ul class="ob-list">
+          <li><span class="num">1</span><b>세미나는 3개월 치를 한 번에 기획합니다.</b> 매달 따로 정하지 않고, 분기별로 3건을 묶어 미리 준비합니다.</li>
+          <li><span class="num">2</span><b>강사가 곧 우리 고객입니다.</b> 실제로 교재를 쓰고 계신 현직 선생님을 모시기 때문에, 섭외와 교안 준비에만 한 달 넘게 걸립니다.</li>
+          <li><span class="num">3</span><b>그래서 미리 받습니다.</b> 세미나가 정해진 뒤에 의견을 주시면, 아무리 좋은 아이디어라도 반영할 시간이 남지 않습니다.</li>
+        </ul>
+
+        <div class="ob-point">
+          지금 남겨주시는 한 줄이 <b>다음 분기 세미나의 출발점</b>이 됩니다.<br>
+          다듬어서 쓰지 않으셔도 됩니다. <b>2~3분이면 충분합니다.</b>
+        </div>
+      </div>
+      <div class="ob-foot">
+        <label class="ob-check">
+          <input type="checkbox" id="obHide"> 다음부터 이 안내를 보지 않기
+        </label>
+        <button type="button" class="ob-btn" onclick="closeOnboarding()">확인했습니다</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.style.overflow = 'hidden';
+  setTimeout(()=>{ const b = layer.querySelector('.ob-btn'); if(b) b.focus({preventScroll:true}); }, 380);
+}
+
+function closeOnboarding(){
+  const layer = document.getElementById('onboardLayer');
+  const back = document.getElementById('obBackdrop');
+  const hide = document.getElementById('obHide');
+  if(hide && hide.checked){ try{ localStorage.setItem(OB_HIDE_KEY, '1'); }catch(e){} }
+  state.onboardOpen = false;
+  if(!back){ layer.innerHTML = ''; document.body.style.overflow = ''; return; }
+  back.classList.add('closing');
+  setTimeout(()=>{ layer.innerHTML = ''; document.body.style.overflow = ''; }, 180);
+}
+
 function openSheetLayer(html){
   document.getElementById('sheetLayer').innerHTML = html;
   document.body.style.overflow = 'hidden';
@@ -1061,7 +1516,9 @@ function closeSheet(){
   document.body.style.overflow = '';
 }
 document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape' && document.getElementById('sheetLayer').innerHTML) closeSheet();
+  if(e.key !== 'Escape') return;
+  if(state.onboardOpen){ closeOnboarding(); return; }
+  if(document.getElementById('sheetLayer').innerHTML) closeSheet();
 });
 
 /* =========================================================
@@ -1175,7 +1632,7 @@ function renderForm(){
     <div class="section-label">기본 정보</div>
 
     <div class="field${cls("qtr")}" data-field="qtr">
-      <label><span class="field-num">1</span>요청하시는 세미나 월<span class="req">*</span></label>
+      <label><span class="field-num">1</span>세미나가 열렸으면 하는 시기<span class="req">*</span></label>
       <div class="btn-group">
         ${YEARS.map(y => `<button type="button" class="choice-btn ${f.qtrYear===y?"selected":""}" onclick="setFormField('qtrYear','${y}')">${y}년</button>`).join("")}
       </div>
@@ -1184,7 +1641,7 @@ function renderForm(){
         ${QUARTER_DEFS.map(qd => `<button type="button" class="choice-btn ${f.qtrQuarter===qd.label?"selected":""}" onclick="setFormField('qtrQuarter','${qd.label}')">${qd.label}</button>`).join("")}
       </div>` : ""}
       ${f.qtr ? `<div class="picked">선택하신 시기: <b>${escapeHtml(f.qtr)}</b></div>` : ""}
-      <div class="help">연도를 먼저 고르시면 분기 선택이 나타납니다. 정확한 날짜까지는 정하지 않으셔도 되고, 열렸으면 하는 시기만 골라주시면 됩니다.</div>
+      <div class="help">연도를 먼저 고르시면 분기 선택이 나타납니다. 날짜까지 정하지 않으셔도 됩니다.</div>
       ${msg("qtr")}
     </div>
 
@@ -1199,14 +1656,14 @@ function renderForm(){
         <input type="text" placeholder="예: 디지털서비스본부, ELT사업본부, 콘텐츠개발본부"
           value="${escapeAttr(f.deptCustom)}" oninput="setFormField('deptCustom', this.value)">
       </div>` : ""}
-      <div class="help">목록에 소속 부서가 없으시면 <b>+ 직접 입력</b>을 눌러 부서명을 적어주세요. 본부·팀 어느 단위로 적으셔도 괜찮습니다.</div>
+      <div class="help">소속 부서가 목록에 없으면 <b>+ 직접 입력</b>을 눌러 적어주세요. 본부든 팀이든 괜찮습니다.</div>
       ${msg("dept")}
     </div>
 
     <div class="field${cls("owner")}" data-field="owner">
       <label><span class="field-num">3</span>담당자<span class="req">*</span></label>
       <input type="text" placeholder="이름을 입력해주세요" value="${escapeAttr(f.owner)}" oninput="setFormField('owner', this.value)">
-      <div class="help">검토 중 여쭤볼 내용이 생겼을 때 연락드릴 분의 이름입니다. 진행현황 목록에는 표시되지 않습니다.</div>
+      <div class="help">검토하다 여쭤볼 것이 생기면 연락드릴 분입니다. 목록에는 이름이 나오지 않습니다.</div>
       ${msg("owner")}
     </div>
 
@@ -1222,7 +1679,7 @@ function renderForm(){
       <div class="sub-caption" style="margin-top:10px;">상세 내용</div>
       <input type="text" placeholder="예: 겨울방학 특강 세트, 개정판 중1~3 세트 등"
         value="${escapeAttr(f.productDetail)}" oninput="setFormField('productDetail', this.value)">
-      <div class="help">어떤 범위를 다뤘으면 하시는지 적어주세요. 학년, 시리즈, 세트 단위처럼 <b>구체적일수록</b> 강사 섭외가 수월해집니다.</div>
+      <div class="help">어느 범위를 다뤘으면 하시는지 적어주세요. 학년이나 세트 단위로 <b>구체적으로</b> 적어주시면 강사를 찾기 쉬워집니다.</div>
       ` : `<div class="help">먼저 교재인지 서비스인지 골라주세요. 고르시면 이름을 적는 칸이 나타납니다.</div>`}
       ${msg("product")}
     </div>
@@ -1234,7 +1691,7 @@ function renderForm(){
           <span class="kind-btn-title">${kd.label}</span>${kd.desc ? `<span class="kind-btn-desc">${kd.desc}</span>` : ""}
         </button>`).join("")}
       </div>
-      <div class="help">고르기 어려우시면 버튼 아래 설명을 참고해주세요. 검토 과정에서 더 맞는 종류로 조정될 수 있으니 편하게 선택하셔도 됩니다.</div>
+      <div class="help">버튼 아래 설명을 참고해주세요. 검토하면서 바뀔 수 있으니 편하게 고르셔도 됩니다.</div>
       ${msg("kind")}
     </div>
 
@@ -1244,7 +1701,7 @@ function renderForm(){
         ${TARGET_OPTIONS.map(t => `<button type="button" class="choice-btn ${f.targetSelected.includes(t)?"selected":""}" onclick="toggleTargetTag('${t}')">${t}</button>`).join("")}
       </div>
       ${f.targetSelected.length ? `<div class="picked">선택하신 고객: <b>${f.targetSelected.join(" · ")}</b></div>` : ""}
-      <div class="help">이 세미나를 <b>누가 들었으면 하는지</b> 골라주세요. 학년(유치·초등·중등·고등)과 대상(학원장·강사·학부모·학생)을 함께 고르시면 가장 정확합니다.</div>
+      <div class="help"><b>누가 들었으면 하는지</b> 골라주세요. 학년(유치·초등·중등·고등)과 대상(학원장·강사·학부모·학생)을 함께 고르시면 좋습니다.</div>
       ${msg("target")}
     </div>
 
@@ -1278,7 +1735,7 @@ https://... - 유사 주제 타 세미나 참고사례" oninput="setFormField('r
     <div class="field">
       <label><span class="field-num">10</span>작성자 이메일<span class="opt">선택 · 알림용</span></label>
       <input type="email" placeholder="you@example.com" value="${escapeAttr(f.email)}" oninput="setFormField('email', this.value)">
-      <div class="help">남겨주시면 검토 결과(수락 / 차기 검토)가 확정될 때 메일로 알려드립니다. 적지 않으셔도 <b>진행현황</b> 화면에서 언제든 확인하실 수 있습니다.</div>
+      <div class="help">적어주시면 검토 결과가 정해질 때 메일로 알려드립니다. 안 적으셔도 <b>진행현황</b>에서 직접 확인하실 수 있습니다.</div>
     </div>
 
     <div class="submit-bar">
@@ -1387,6 +1844,11 @@ async function submitForm(){
         headers: {'Content-Type': 'text/plain;charset=utf-8'}, // preflight 방지용
         body: JSON.stringify(payload)
       });
+      if(res.status === 404){
+        showSubmitError('연결된 Apps Script 배포를 찾을 수 없습니다. 관리자에게 문의해주세요. 작성하신 내용은 그대로 보관됩니다.');
+        if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = '제출하기'; }
+        return;
+      }
       const text = await res.text();
       let data;
       try{
@@ -1419,7 +1881,8 @@ async function submitForm(){
   const seq = state.needs.length + 1;
   const id = `N-${year}-${String(seq).padStart(3,'0')}`;
   const now = new Date();
-  const submitted = now.toISOString().slice(0,16).replace('T',' ');
+  const pad2 = x => String(x).padStart(2,'0');
+  const submitted = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())} ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
   const newNeed = {...payload, id, submitted, status:"접수완료", holdReason:""};
   state.needs.push(newNeed);
   persistNeeds();
@@ -1459,17 +1922,19 @@ function goToProgressAfterSubmit(){
 function onSearchInput(v){
   state.searchQuery = v;
   state.highlightId = '';
+  state.page = 1;
   renderOnly();
 }
-function setSearchField(v){ state.searchField = v; state.highlightId=''; renderOnly(); }
-function setStatusFilter(v){ state.filterStatus = v; state.highlightId=''; renderOnly(); }
-function setQtrFilter(v){ state.filterQtr = v; state.highlightId=''; renderOnly(); }
+function setSearchField(v){ state.searchField = v; state.highlightId=''; state.page=1; renderOnly(); }
+function setStatusFilter(v){ state.filterStatus = v; state.highlightId=''; state.page=1; renderOnly(); }
+function setQtrFilter(v){ state.filterQtr = v; state.highlightId=''; state.page=1; renderOnly(); }
 function clearFilters(){
   state.searchQuery = '';
   state.searchField = 'all';
   state.filterStatus = 'all';
   state.filterQtr = 'all';
   state.highlightId = '';
+  state.page = 1;
   renderOnly();
 }
 function hasActiveFilter(){
@@ -1486,7 +1951,7 @@ const SEARCH_FIELDS = [
   {key:'product', label:'제품·서비스',       pick:n => [n.productName, n.productDetail, n.productType]},
   {key:'kind',    label:'세미나종류',        pick:n => [n.kind]},
   {key:'target',  label:'목표고객',          pick:n => [n.target]},
-  {key:'text',    label:'요청사유·기대효과', pick:n => [n.background, n.effect]}
+  {key:'text',    label:'요청 사유·기대효과', pick:n => [n.background, n.effect]}
 ];
 const STATUS_OPTIONS = ['접수완료','검토중','수락(채택)','차기 검토','완료'];
 
@@ -1580,13 +2045,16 @@ function escapeAttr(str){
 /* 시트 값이 숫자·날짜여도 문자열로 안전하게 다루기 위한 헬퍼 */
 function str(v){ return (v === null || v === undefined) ? '' : String(v); }
 
-/* sheet layer container */
-const sheetLayer = document.createElement('div');
-sheetLayer.id = 'sheetLayer';
-document.body.appendChild(sheetLayer);
+/* 팝업이 렌더링될 레이어 */
+['sheetLayer','onboardLayer'].forEach(id => {
+  const el = document.createElement('div');
+  el.id = id;
+  document.body.appendChild(el);
+});
 
 /* init */
 loadStoredNeeds();
+openOnboarding(false);
 </script>
 </body>
 </html>
